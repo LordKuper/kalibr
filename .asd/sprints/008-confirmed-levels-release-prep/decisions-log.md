@@ -37,4 +37,3 @@ A decision whose value must survive this sprint's archival is ALSO written into 
 ## Entries
 
 <!-- entries appended below this line -->
-- 2026-11-05 — audit (адаптивный гейт, оркестратор): все AC выполнимы; два противоречия закрыты принятым скоупом и правилом проекта; новых подсистем, пропусков документов и вопросов к пользователю нет; Docker при audit не запущен, это риск для impl-test
