@@ -1,7 +1,7 @@
 {
   "sprint_id": "008-confirmed-levels-release-prep",
   "branch": "sprint/008-confirmed-levels-release-prep",
-  "phase": "scope",
+  "phase": "audit",
   "workflow": "lite",
   "documents": {
     "audit": true,
@@ -34,6 +34,13 @@
       "reason": "accept as one sprint, no split; AC-9 migration file deletion and AC-20 tag push authorized; cost 0 iterations/0 fix rounds",
       "evidence": "sprint.md AC-1..AC-20",
       "artifact_revision": "sprint.md accepted 2026-11-05"
+    },
+    {
+      "gate": "audit",
+      "decision_actor": "orchestrator",
+      "reason": "adaptive: all AC deliverable; two contradictions settled by accepted scope and project rule; no subsystem, document-skip or unresolved gate pending",
+      "evidence": "audit.md",
+      "artifact_revision": "audit.md 2026-11-05"
     }
   ],
   "task_routing": {},
@@ -57,7 +64,7 @@
     }
   },
   "created_at": "2026-11-05T15:12:22.117Z",
-  "updated_at": "2026-11-05T15:32:56.450Z",
+  "updated_at": "2026-11-05T15:36:42.843Z",
   "review_fixes_pending": null,
   "test_defects_pending": null,
   "pr": null,
