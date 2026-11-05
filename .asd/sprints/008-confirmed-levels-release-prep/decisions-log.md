@@ -37,3 +37,4 @@ A decision whose value must survive this sprint's archival is ALSO written into 
 ## Entries
 
 <!-- entries appended below this line -->
+- 2026-11-05 — plan.md accepted (адаптивный гейт, оркестратор): 7 Task, 5 волн; каждая Task прослежена до принятых AC; настройка backward_compat=migration разрешена AC-12; заглушек и новых зависимостей нет
