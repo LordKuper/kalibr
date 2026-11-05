@@ -5,7 +5,7 @@ namespace Kalibr.Tests;
 
 /// <summary>
 /// What the image build and the operators read must follow the code: every source project is restored before the sources are copied in, or the
-/// image build fails, and the deployment guide tells how to move an existing deployment to the squashed migration line.
+/// image build fails, and the deployment guide tells how to recreate a database deployed before 1.0.0.
 /// </summary>
 public sealed class DeploymentTests
 {
