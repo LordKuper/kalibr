@@ -1,7 +1,7 @@
 {
   "sprint_id": "008-confirmed-levels-release-prep",
   "branch": "sprint/008-confirmed-levels-release-prep",
-  "phase": "plan",
+  "phase": "impl",
   "workflow": "lite",
   "documents": {
     "audit": true,
@@ -50,7 +50,20 @@
       "artifact_revision": "plan.md 2026-11-05"
     }
   ],
-  "task_routing": {},
+  "task_routing": {
+    "Task 1": {
+      "execution": "agent",
+      "tier": "mechanical",
+      "reason": "artifact-risk:project rule swap",
+      "resolved_model": "haiku"
+    },
+    "Task 2": {
+      "execution": "agent",
+      "tier": "standard",
+      "reason": "normal",
+      "resolved_model": "sonnet"
+    }
+  },
   "skipped_phases": [],
   "reviews": {
     "design": {
@@ -71,7 +84,7 @@
     }
   },
   "created_at": "2026-11-05T15:12:22.117Z",
-  "updated_at": "2026-11-05T15:40:03.665Z",
+  "updated_at": "2026-11-05T15:41:37.241Z",
   "review_fixes_pending": null,
   "test_defects_pending": null,
   "pr": null,

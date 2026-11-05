@@ -7,3 +7,11 @@
 {"op":"close","id":"wait approach choice","kind":"user-wait","parent":"scope#1","start":"2026-11-05T15:18:25.758Z","end":"2026-11-05T15:21:49.388Z","outcome":"done","attrs":{"gate":"approach choice"}}
 {"op":"open","id":"wait scope","kind":"user-wait","parent":"scope#1","start":"2026-11-05T15:22:56.406Z","attrs":{"gate":"scope"}}
 {"op":"close","id":"wait scope","kind":"user-wait","parent":"scope#1","start":"2026-11-05T15:22:56.406Z","end":"2026-11-05T15:32:56.387Z","outcome":"done","attrs":{"gate":"scope"}}
+{"op":"close","id":"scope#1","kind":"phase","parent":null,"start":"2026-11-05T15:09:23.096Z","end":"2026-11-05T15:32:56.792Z","outcome":"done","attrs":{}}
+{"op":"open","id":"audit#1","kind":"phase","parent":null,"start":"2026-11-05T15:32:56.792Z","attrs":{}}
+{"op":"close","id":"audit#1","kind":"phase","parent":null,"start":"2026-11-05T15:32:56.792Z","end":"2026-11-05T15:36:43.209Z","outcome":"done","attrs":{}}
+{"op":"open","id":"plan#1","kind":"phase","parent":null,"start":"2026-11-05T15:36:43.209Z","attrs":{}}
+{"op":"close","id":"plan#1","kind":"phase","parent":null,"start":"2026-11-05T15:36:43.209Z","end":"2026-11-05T15:40:04.021Z","outcome":"done","attrs":{}}
+{"op":"open","id":"impl#1","kind":"phase","parent":null,"start":"2026-11-05T15:40:04.021Z","attrs":{}}
+{"op":"open","id":"Task 1","kind":"dispatch","parent":"impl#1","start":"2026-11-05T15:40:41.312Z","attrs":{"agent":"asd-dev-mechanical","tier":"mechanical","model":"haiku"}}
+{"op":"close","id":"Task 1","kind":"dispatch","parent":"impl#1","start":"2026-11-05T15:40:41.312Z","end":"2026-11-05T15:41:36.420Z","outcome":"done","attrs":{"agent":"asd-dev-mechanical","tier":"mechanical","model":"haiku"}}

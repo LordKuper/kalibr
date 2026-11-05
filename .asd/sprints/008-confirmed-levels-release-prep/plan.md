@@ -25,7 +25,7 @@ Standing DoD applies (`sprint-lifecycle.md` "Plan file format") — not restated
 Material risk: artifact: project rule swap
 Settings change: backward_compat=migration
 AC: AC-12, AC-13.
-- [ ] В `.asd/project/custom-common-rules.md` заменить раздел «No backward compatibility before 1.0» на раздел «Release compatibility» со следующим текстом:
+- [x] В `.asd/project/custom-common-rules.md` заменить раздел «No backward compatibility before 1.0» на раздел «Release compatibility» со следующим текстом:
 
   ```markdown
   ## Release compatibility
@@ -34,7 +34,7 @@ AC: AC-12, AC-13.
   - Data survives every release: the DB schema changes only forward, by incremental EF migrations over the baseline `InitialCreate`, which is never regenerated. A migration preserves existing data and transfers it where a change moves it or alters its meaning; the transfer is SQL in `Up` after the new structure is created and before the old one is dropped (`docs/architecture/stack.html` «Контракт из кода»).
   - An upgrade starts with a database backup; a rollback restores the backup and the previous image. Expand/contract is not used: one replica, `strategy: Recreate`. (`008-confirmed-levels-release-prep#AC-13`, replaces `004-role-desktop-user-journeys#AC-58`, `#AC-63`)
   ```
-- [ ] Проверить: `grep -n "before 1.0\|Until release 1.0" .asd/project/custom-common-rules.md` пуст.
+- [x] Проверить: `grep -n "before 1.0\|Until release 1.0" .asd/project/custom-common-rules.md` пуст.
 
 ### Task 2: Подтверждённый уровень в карточке кандидата
 Material risk: none
