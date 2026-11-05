@@ -48,11 +48,11 @@ AC: AC-1, AC-2, AC-4, AC-5, AC-6, AC-7.
 ### Task 3: Подтверждённый уровень на формах и в демо
 Material risk: none
 AC: AC-3, AC-8, AC-11.
-- [ ] Выполнить `gen-api`, `web/src/api/schema.d.ts` обновлён, `check-api` чист.
-- [ ] В `web/src/features/promotion/ReviewParts.tsx` добавить `ConfirmedLevelText({ level })`: вторичным текстом в одну строку «Подтверждено: 3 из 4, {дата решения} · {levelName}»; максимум шкалы — `level.scalePoints.at(-1)`, дата — существующий `formatDate`, без новых токенов. `null` не рисует ничего.
-- [ ] В `ChairReviewView.tsx` и `MemberReviewView.tsx` вывести `ConfirmedLevelText` в ячейке «Компетенция» под названием и тегами; новой колонки нет, строка без подтверждения не меняется.
-- [ ] В `demo/scenario.tsx` задать подтверждённый уровень хотя бы одной компетенции и `null` у остальных, в типах и строках сценария.
-- [ ] В `tours.ts` шаг `review-card` дополнить одной фразой о подтверждённом уровне, по правилу надписей: только то, что нужно для действия.
+- [x] Выполнить `gen-api`, `web/src/api/schema.d.ts` обновлён, `check-api` чист.
+- [x] В `web/src/features/promotion/ReviewParts.tsx` добавить `ConfirmedLevelText({ level })`: вторичным текстом в одну строку «Подтверждено: 3 из 4, {дата решения} · {levelName}»; максимум шкалы — `level.scalePoints.at(-1)`, дата — существующий `formatDate`, без новых токенов. `null` не рисует ничего.
+- [x] В `ChairReviewView.tsx` и `MemberReviewView.tsx` вывести `ConfirmedLevelText` в ячейке «Компетенция» под названием и тегами; новой колонки нет, строка без подтверждения не меняется.
+- [x] В `demo/scenario.tsx` задать подтверждённый уровень хотя бы одной компетенции и `null` у остальных, в типах и строках сценария.
+- [x] В `tours.ts` шаг `review-card` дополнить одной фразой о подтверждённом уровне, по правилу надписей: только то, что нужно для действия.
 
 ### Task 4: Базовая миграция InitialCreate
 Material risk: change: migration
@@ -67,20 +67,20 @@ AC: AC-9.
 ### Task 5: Роль БД без суперправ и инструкция развёртывания
 Material risk: change: security
 AC: AC-10, AC-14, AC-15, AC-17, AC-18.
-- [ ] Схема учётных записей: `POSTGRES_USER=postgres` — суперпользователь, только для обслуживания; роль приложения `kalibr`: `LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE`, владелец базы `kalibr`, пароль `KALIBR_DB_PASSWORD`.
-- [ ] В `deploy/k8s/configmap.yaml` сменить `POSTGRES_USER` на `postgres`, обновить комментарий и добавить ConfigMap `db-init` со скриптом `10-app-role.sh`: `psql -v ON_ERROR_STOP=1 -v app_password="$KALIBR_DB_PASSWORD" --username "$POSTGRES_USER" --dbname "$POSTGRES_DB"` с командами `CREATE ROLE kalibr … PASSWORD :'app_password'` и `ALTER DATABASE kalibr OWNER TO kalibr`.
-- [ ] В `deploy/k8s/db.yaml` передать `KALIBR_DB_PASSWORD` из Secret и смонтировать `db-init` в `/docker-entrypoint-initdb.d` только на чтение.
-- [ ] В `deploy/secret.template.yaml` добавить `KALIBR_DB_PASSWORD`, в `ConnectionStrings__Default` указать его, обновить комментарии.
-- [ ] В `deploy/dev/docker-compose.yml` сменить `POSTGRES_USER` на `postgres`, добавить `KALIBR_DB_PASSWORD: dev_pass_123` и монтирование нового `deploy/dev/db-init.sh`; `healthcheck` оставить на `kalibr`. `launchSettings.json` не меняется: имя и пароль те же.
-- [ ] В `deploy/README.md` заменить строку 92 и связанные пункты: первая установка 1.0.0, единственный переход старых баз на новую `InitialCreate` пересозданием (с прежними командами и упоминанием `__EFMigrationsHistory`), порядок обновления с резервной копией `pg_dump` перед обновлением и откат восстановлением копии с прежним образом, две учётные записи; Q5 назвать открытым. `<VERSION>` определить как версию выпуска, первая — `1.0.0`, с примером `kalibr-app:1.0.0`.
-- [ ] В `deploy/dev/README.md` обновить таблицу учётных данных и описать разовое пересоздание тома `kalibr-dev-pgdata` пользователем командами для него; агенты их не выполняют.
+- [x] Схема учётных записей: `POSTGRES_USER=postgres` — суперпользователь, только для обслуживания; роль приложения `kalibr`: `LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE`, владелец базы `kalibr`, пароль `KALIBR_DB_PASSWORD`.
+- [x] В `deploy/k8s/configmap.yaml` сменить `POSTGRES_USER` на `postgres`, обновить комментарий и добавить ConfigMap `db-init` со скриптом `10-app-role.sh`: `psql -v ON_ERROR_STOP=1 -v app_password="$KALIBR_DB_PASSWORD" --username "$POSTGRES_USER" --dbname "$POSTGRES_DB"` с командами `CREATE ROLE kalibr … PASSWORD :'app_password'` и `ALTER DATABASE kalibr OWNER TO kalibr`.
+- [x] В `deploy/k8s/db.yaml` передать `KALIBR_DB_PASSWORD` из Secret и смонтировать `db-init` в `/docker-entrypoint-initdb.d` только на чтение.
+- [x] В `deploy/secret.template.yaml` добавить `KALIBR_DB_PASSWORD`, в `ConnectionStrings__Default` указать его, обновить комментарии.
+- [x] В `deploy/dev/docker-compose.yml` сменить `POSTGRES_USER` на `postgres`, добавить `KALIBR_DB_PASSWORD: dev_pass_123` и монтирование нового `deploy/dev/db-init.sh`; `healthcheck` оставить на `kalibr`. `launchSettings.json` не меняется: имя и пароль те же.
+- [x] В `deploy/README.md` заменить строку 92 и связанные пункты: первая установка 1.0.0, единственный переход старых баз на новую `InitialCreate` пересозданием (с прежними командами и упоминанием `__EFMigrationsHistory`), порядок обновления с резервной копией `pg_dump` перед обновлением и откат восстановлением копии с прежним образом, две учётные записи; Q5 назвать открытым. `<VERSION>` определить как версию выпуска, первая — `1.0.0`, с примером `kalibr-app:1.0.0`.
+- [x] В `deploy/dev/README.md` обновить таблицу учётных данных и описать разовое пересоздание тома `kalibr-dev-pgdata` пользователем командами для него; агенты их не выполняют.
 
 ### Task 6: Версия 1.0.0 и CHANGELOG
 Material risk: none
 AC: AC-18, AC-19.
-- [ ] В `Directory.Build.props` добавить `<Version>1.0.0</Version>`.
-- [ ] В `web/package.json` и обоих полях версии корня `web/package-lock.json` указать `1.0.0`.
-- [ ] Создать `CHANGELOG.md` в корне на русском: раздел `## 1.0.0 — 2026-11-05`, что входит в первый релиз по `docs/architecture/subsystems.md`, примечание об установке с нуля.
+- [x] В `Directory.Build.props` добавить `<Version>1.0.0</Version>`.
+- [x] В `web/package.json` и обоих полях версии корня `web/package-lock.json` указать `1.0.0`.
+- [x] Создать `CHANGELOG.md` в корне на русском: раздел `## 1.0.0 — 2026-11-05`, что входит в первый релиз по `docs/architecture/subsystems.md`, примечание об установке с нуля.
 
 ### Task 7: Тесты под ролью без суперправ
 Material risk: none
