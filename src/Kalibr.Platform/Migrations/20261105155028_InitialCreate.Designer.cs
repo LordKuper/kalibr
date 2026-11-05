@@ -13,8 +13,8 @@ using NpgsqlTypes;
 namespace Kalibr.Platform.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261028210502_TwoCompetencyTypesAndEmployeeEducation")]
-    partial class TwoCompetencyTypesAndEmployeeEducation
+    [Migration("20261105155028_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1161,6 +1161,10 @@ namespace Kalibr.Platform.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("ignore_interval_by");
 
+                    b.Property<bool>("IsSentToReview")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_sent_to_review");
+
                     b.Property<Guid>("LevelId")
                         .HasColumnType("uuid")
                         .HasColumnName("level_id");
@@ -1196,6 +1200,10 @@ namespace Kalibr.Platform.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("version_id");
 
+                    b.Property<bool>("WasHeldAtClose")
+                        .HasColumnType("boolean")
+                        .HasColumnName("was_held_at_close");
+
                     b.Property<Guid>("WaveId")
                         .HasColumnType("uuid")
                         .HasColumnName("wave_id");
@@ -1212,9 +1220,9 @@ namespace Kalibr.Platform.Migrations
 
                     b.HasIndex("VersionId");
 
-                    b.HasIndex("WaveId", "MatrixId");
-
                     b.HasIndex("WaveId", "OrgUnitId");
+
+                    b.HasIndex("WaveId", "OrgUnitId", "MatrixId");
 
                     b.HasIndex(new[] { "WaveId", "EmployeeId" }, "ux_promotion_applications_unfinished")
                         .IsUnique()
@@ -1237,12 +1245,6 @@ namespace Kalibr.Platform.Migrations
                         .IsRequired()
                         .HasColumnType("jsonb")
                         .HasColumnName("links");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)")
-                        .HasColumnName("text");
 
                     b.HasKey("ApplicationId", "CompetencyId");
 
@@ -1343,6 +1345,22 @@ namespace Kalibr.Platform.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("promotion_raters", (string)null);
+                });
+
+            modelBuilder.Entity("Kalibr.Promotion.PromotionRaterExclusion", b =>
+                {
+                    b.Property<string>("Kind")
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)")
+                        .HasColumnName("kind");
+
+                    b.Property<Guid>("SubjectId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("subject_id");
+
+                    b.HasKey("Kind", "SubjectId");
+
+                    b.ToTable("promotion_rater_exclusions", (string)null);
                 });
 
             modelBuilder.Entity("Kalibr.Promotion.PromotionRaterScore", b =>
@@ -1489,13 +1507,13 @@ namespace Kalibr.Platform.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("wave_id");
 
-                    b.Property<Guid>("MatrixId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("matrix_id");
-
                     b.Property<Guid>("OrgUnitId")
                         .HasColumnType("uuid")
                         .HasColumnName("org_unit_id");
+
+                    b.Property<Guid>("MatrixId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("matrix_id");
 
                     b.Property<Guid>("TrackId")
                         .HasColumnType("uuid")
@@ -1511,7 +1529,7 @@ namespace Kalibr.Platform.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("version_id");
 
-                    b.HasKey("WaveId", "MatrixId");
+                    b.HasKey("WaveId", "OrgUnitId", "MatrixId");
 
                     b.HasIndex("MatrixId");
 
@@ -1533,6 +1551,10 @@ namespace Kalibr.Platform.Migrations
                     b.Property<Guid>("OrgUnitId")
                         .HasColumnType("uuid")
                         .HasColumnName("org_unit_id");
+
+                    b.Property<bool>("NoChairLetterSent")
+                        .HasColumnType("boolean")
+                        .HasColumnName("no_chair_letter_sent");
 
                     b.HasKey("WaveId", "OrgUnitId");
 
@@ -2056,7 +2078,7 @@ namespace Kalibr.Platform.Migrations
 
                     b.HasOne("Kalibr.Promotion.PromotionWaveMatrix", null)
                         .WithMany()
-                        .HasForeignKey("WaveId", "MatrixId")
+                        .HasForeignKey("WaveId", "OrgUnitId", "MatrixId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
