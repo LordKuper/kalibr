@@ -57,12 +57,12 @@ AC: AC-3, AC-8, AC-11.
 ### Task 4: Базовая миграция InitialCreate
 Material risk: change: migration
 AC: AC-9.
-- [ ] Сохранить в рабочей копии тексты объектов вне модели, затем удалить все файлы `src/Kalibr.Platform/Migrations/` (15 миграций, их `.Designer.cs`, `AppDbContextModelSnapshot.cs`); удаление разрешено пользователем на гейте scope.
-- [ ] Выполнить `ef-migration-add InitialCreate`: новый идентификатор с текущей датой.
-- [ ] В `Up` новой миграции добавить без изменений тела объектов вне модели, с `Down`: функция `audit_events_reject_change`, триггеры `audit_events_reject_update_delete`, `audit_events_reject_truncate`, `ENABLE ALWAYS TRIGGER` для обоих, индексы `IX_positions_name_lower`, `IX_legal_entities_name_lower`, вставка шкалы по умолчанию в `competency_scales`.
-- [ ] Не переносить разовые `UPDATE` и `DELETE` старых миграций: базы пустые.
-- [ ] Проверить все формы удаляемых имён: `rg -n "2026102[0-9]{7}_|20261030[0-9]{6}_" src tests deploy` находит только новую миграцию и удаляемый в Task 7 `IdentityRolesMigrationTests.cs`.
-- [ ] `ef-pending-changes` чист, `dotnet build Kalibr.slnx --tl:off -c Release` без предупреждений.
+- [x] Сохранить в рабочей копии тексты объектов вне модели, затем удалить все файлы `src/Kalibr.Platform/Migrations/` (15 миграций, их `.Designer.cs`, `AppDbContextModelSnapshot.cs`); удаление разрешено пользователем на гейте scope.
+- [x] Выполнить `ef-migration-add InitialCreate`: новый идентификатор с текущей датой.
+- [x] В `Up` новой миграции добавить без изменений тела объектов вне модели, с `Down`: функция `audit_events_reject_change`, триггеры `audit_events_reject_update_delete`, `audit_events_reject_truncate`, `ENABLE ALWAYS TRIGGER` для обоих, индексы `IX_positions_name_lower`, `IX_legal_entities_name_lower`, вставка шкалы по умолчанию в `competency_scales`.
+- [x] Не переносить разовые `UPDATE` и `DELETE` старых миграций: базы пустые.
+- [x] Проверить все формы удаляемых имён: `rg -n "2026102[0-9]{7}_|20261030[0-9]{6}_" src tests deploy` находит только новую миграцию и удаляемый в Task 7 `IdentityRolesMigrationTests.cs`.
+- [x] `ef-pending-changes` чист, `dotnet build Kalibr.slnx --tl:off -c Release` без предупреждений.
 
 ### Task 5: Роль БД без суперправ и инструкция развёртывания
 Material risk: change: security
