@@ -1,7 +1,7 @@
 {
   "sprint_id": "007-rename-competency-to-kalibr",
   "branch": "sprint/007-rename-competency-to-kalibr",
-  "phase": "pr",
+  "phase": "done",
   "workflow": "lite",
   "documents": {
     "audit": true,
@@ -111,6 +111,13 @@
       "reason": "adaptive: DoD met (plan, reviews, full suite, retro, stubs); scope authority — user-accepted sprint.md AC-1..AC-19; gh authenticated with push access",
       "evidence": "decisions-log.md 2026-10-30 pr open mode DoD; test-plan.md Suite run",
       "artifact_revision": "PR #12"
+    },
+    {
+      "gate": "sprint-closure",
+      "decision_actor": "orchestrator",
+      "reason": "PR #12 merged",
+      "evidence": "merge commit 467c631da396582affc5bdae1ecc148fcf29668a",
+      "artifact_revision": "467c631"
     }
   ],
   "task_routing": {
@@ -157,13 +164,14 @@
     }
   },
   "created_at": "2026-10-30T15:31:30.399Z",
-  "updated_at": "2026-10-30T18:36:37.697Z",
+  "updated_at": "2026-11-05T15:09:22.727Z",
   "review_fixes_pending": null,
   "test_defects_pending": null,
   "pr": {
     "number": 12,
     "url": "https://github.com/LordKuper/competency-management-service/pull/12",
-    "state": "open"
+    "state": "merged",
+    "merge_commit": "467c631da396582affc5bdae1ecc148fcf29668a"
   },
-  "archived_at": null
+  "archived_at": "2026-11-05T15:09:22.727Z"
 }
