@@ -48,6 +48,14 @@
       "reason": "adaptive: every Task traces to user-accepted AC and the chosen approach; settings pair authorized by AC-12; no stub or new dependency; migration deletion authorized at scope",
       "evidence": "plan.md; sprint.md AC-1..AC-20; research.md Chosen",
       "artifact_revision": "plan.md 2026-11-05"
+    },
+    {
+      "gate": "initial impl assessment",
+      "actor": "orchestrator",
+      "decision": "approved",
+      "artifact_revision": "213eb654",
+      "evidence": "all Tasks ticked; build, lint, check:api, ef pending clean; round diff in authorized paths; no stubs; flagged choices accepted, no predicate or contract change",
+      "at": "2026-11-05T15:55:40.655Z"
     }
   ],
   "task_routing": {
@@ -108,7 +116,7 @@
     }
   },
   "created_at": "2026-11-05T15:12:22.117Z",
-  "updated_at": "2026-11-05T15:49:43.623Z",
+  "updated_at": "2026-11-05T15:55:40.656Z",
   "review_fixes_pending": null,
   "test_defects_pending": null,
   "pr": null,
