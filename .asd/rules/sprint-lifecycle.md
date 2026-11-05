@@ -119,7 +119,7 @@ Every scoped test run in `impl` and `impl-test` uses the **impacted set** — so
 
 **Native selector override.** When `commands.yaml` carries a `test_affected` field (a native runner flag such as `--changedSince`/`--onlyChanged`, or a filter expression), that field's result REPLACES the search-derived set above — the runner's own answer is used, not a second derivation. Field absent → fall back to the search-derived set. The field's shape and `t_commands.yaml`/`asd-init` detection are defined where `commands.yaml` is — this section only names the override mechanism and its key.
 
-**Safety valve — mandatory, not heuristic, checked BEFORE the selector or the search-derived set is used.** The runner of a scoped run — `asd-tester`, or the orchestrator in `cleanup` — MUST apply this test before every such run: when the change surface touches shared infrastructure — build config, CI config, shared/common modules, any framework-wide file — the impacted set degrades to the **full suite** for that run.
+**Safety valve — mandatory, not heuristic, checked BEFORE the selector or the search-derived set is used.** The runner of a scoped run — `asd-tester` at `impl-test`'s step 8 suite gate, or the orchestrator in `cleanup` — MUST apply this test before every such run: when the change surface touches shared infrastructure — build config, CI config, shared/common modules, any framework-wide file — the impacted set degrades to the **full suite** for that run. `impl-test`'s step 3 pre-authoring run and its reruns after each authoring batch use the impacted set without the valve.
 
 **Where impacted-only applies**: `impl` (self-verification only, `asd-phase-impl.md` "Rules" — devs never author/modify/prune a test); `impl-test`'s suite gate (`asd-phase-impl-test.md` step 8); `cleanup`'s verification ("Cleanup phase").
 
@@ -150,7 +150,7 @@ Rows are `standard`'s; `lite` deltas: "Workflows".
 | scope | Main orchestrator | user request, staged-design interviews ("Staged solution design"), retro intake candidates and upstream proposals; self-hosting: open `asd-retro` issues (`asd-phase-scope.md` step 2a) | `research.md`, `sprint.md`, sprint id, branch, retro backlog and issue dispositions | scope gate passed, branch created |
 | audit | Main orchestrator | `sprint.md`, `research.md`, codebase, `docs/`, existing docs any format/location | `audit.md`; optional reverse-engineered/migrated drafts in `<sprint>/design/`; subsystem registry when absent (decomposition enabled) | audit gate passed |
 | design | Main orchestrator | `audit.md`, `research.md` | drafts in `<sprint>/design/` | drafts complete |
-| design-review | Quality + Efficiency + External Review | `<sprint>/design/` | `reviews/design/iter-NN/<reviewer>.md` | DoD met |
+| design-review | Combined + External Review | `<sprint>/design/` | `reviews/design/iter-NN/<reviewer>.md` | DoD met |
 | design-promote | Main orchestrator | approved drafts | persistent docs in `docs/` | drafts merged, decisions-log entry |
 | plan | Main orchestrator | promoted persistent docs, `research.md` | `plan.md` | plan gate passed |
 | impl | Dev (Tester for a `Test-only` Task) | `plan.md` (initial), `reviews/impl/wave-<K>/iter-NN/` findings (review-fix), or `test-plan.md` Defects (test-fix) | code, `manual-steps.md`, a `Test-only` Task's tests | all tasks/findings/defects done; build + lint pass (completion gate) |
@@ -164,7 +164,7 @@ Rows are `standard`'s; `lite` deltas: "Workflows".
 
 `self_hosting: enabled` in `.asd/project/config.yaml` — sole source of truth, no marker file. Absent field or `disabled` = consumer mode (backward compatible, unchanged behavior).
 
-When enabled: Dev may write canonical `.asd/rules/`, `.asd/templates/`, `.asd/agents/`, `.asd/skills/`, `.asd/workflows/`, `.asd/hooks/`, `.asd/runtime.js`, `.asd/migrations/`, `.asd/sync.js`, `.asd/sync-state.json`, `.asd/release-manifest.json`, root `AGENTS.md`, `README.md`, `CHANGELOG.md`, `.gitignore`, `.gitattributes`, `tests/**`, plus its own `.claude/agent-memory/<agent>/` (not generated output — `artifact-layout.md` "Agent memory"). Generated provider views stay read-only: Dev edits canon and never runs `sync.js --apply`; the main orchestrator runs it once, over every view whose canon changed, after the last canon-editing dispatch of a wave or fix round, and commits the regenerated views. In `cleanup` the orchestrator itself may write this canon and runs it over the views its removals made stale, before verification.
+When enabled: Dev may write canonical `.asd/rules/`, `.asd/templates/`, `.asd/agents/`, `.asd/skills/`, `.asd/workflows/`, `.asd/hooks/`, `.asd/runtime.js`, `.asd/migrations/`, `.asd/sync.js`, `.asd/sync-state.json`, `.asd/release-manifest.json`, root `AGENTS.md`, `README.md`, `CHANGELOG.md`, `.gitignore`, `.gitattributes`, `tests/**`, plus its own `.claude/agent-memory/<agent>/` (not generated output — `artifact-layout.md` "Agent memory"). Generated provider views stay read-only: Dev edits canon and never runs `sync.js --apply`; the main orchestrator runs it once, over every view whose canon changed, after the last canon-editing dispatch of a wave (initial) or, in a fix round, after the dev chain and before the tester chain, and commits the regenerated views. In `cleanup` the orchestrator itself may write this canon and runs it over the views its removals made stale, before verification.
 
 Root `AGENTS.md`'s managed-block/hand-edited-tail split: `providers.md` "Canonical path -> per-provider path" (ownership home). `asd-update` is a no-op here (it pulls framework files INTO a consumer; this repo IS the framework).
 
@@ -342,7 +342,7 @@ Its absence semantics are deliberately not `Material risk`'s, and the two are ne
 
 ## Scope amendment
 
-A criterion added, changed or retired after scope acceptance needs the hard `new or changed scope` approval (`checkpoints.md` "Gate policy") and then, in one orchestrator write:
+A criterion added, changed or retired after scope acceptance needs the hard `new or changed scope` approval (`checkpoints.md` "Gate policy"), where the orchestrator presents any contradiction between its rule text and an accepted criterion's rule, and then, in one orchestrator write:
 1. `sprint.md`: the `AC-N` — a new id, never a reused one;
 2. `plan.md`: the Task carrying it, new or amended, in a wave not yet dispatched (a new last wave when none is left), per "Plan file format";
 3. the gate records: a `gate_decisions` entry and one decisions-log entry naming the AC, the Task and its wave. Accepted after impl-review's division point ("Review iteration counters"), the entry's evidence adds `floor_base=wave-<K>/<A>`, A being current review wave K's counter then, and the write clears wave K's `latched` ("APPROVE latch"). impl-review computes wave K's severity floor and iteration cap on `iteration − A`, A from the latest such record accepted since the current `waves.json` division (none → 0), so a rollback reset, which re-divides, retires every earlier one, and the amended code's first iteration `wave-<K>/iter-(A+1)` reviews at a first iteration's floor.

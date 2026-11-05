@@ -16,7 +16,7 @@
     "pr": ["await-merge", "done"]
   },
   "reviewers": {
-    "design": ["quality", "efficiency", "external"],
+    "design": ["combined", "external"],
     "impl": ["quality", "efficiency", "external"]
   },
   "rollback_reset": {

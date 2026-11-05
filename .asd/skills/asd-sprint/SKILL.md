@@ -58,7 +58,7 @@ After any phase skill returns:
 
 ## Rules
 
-- must: before a phase-skill delegation, rotate the decisions log when `.asd/rules/artifact-layout.md` "Decisions log" requires it.
+- must: before a phase-skill delegation run `node .asd/runtime.js rotate-decisions --sprint <sprint> --to <phase>` (condition: `.asd/rules/artifact-layout.md` "Decisions log"); when it prints `"rotated": true`, commit the renamed and recreated files as `chore(sprint): rotate decisions log for <phase>`. None for new-sprint scope (no sprint folder yet).
 - must: phase ops (`sprint-lifecycle.md` "Operation timing"): before each phase-skill delegation run `node .asd/runtime.js timing --ledger <sprint>/timing.jsonl --open <phase> --kind phase`, Step 3 closing the returned phase in the same call (`--close <phase>`); on return close it `done` on `COMPLETED`, `--outcome interrupted` on `FAILED`/`ABORT`; a `QUESTION` halt leaves it open: the relayed question opens a `user-wait` (`gate`: short question label) closed once the answer is processed, and the re-delegation reuses the open phase op (a repeat open is skipped). None for new-sprint scope (its step 1 opens its own), on pr open mode's return (it closed its own), for merge mode (resume at `phase="pr"`, `pr.state="open"`) or the release retry.
 - must: re-detect state on every invocation; the user may interrupt anytime.
 - never: delegate to a skill outside `## Delegates`.
