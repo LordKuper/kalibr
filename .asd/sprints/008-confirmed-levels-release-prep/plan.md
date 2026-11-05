@@ -86,10 +86,10 @@ AC: AC-18, AC-19.
 Material risk: none
 Test-only: tests/Kalibr.Tests/IdentityRolesMigrationTests.cs, tests/Kalibr.Tests/Infrastructure/TestEnvironment.cs, tests/Kalibr.Tests/PlatformTests.cs, tests/Kalibr.Tests/DeploymentTests.cs
 AC: AC-9, AC-10, AC-16.
-- [ ] Удалить `IdentityRolesMigrationTests.cs` вместе с удалённой миграцией, как велит комментарий этого класса.
-- [ ] В `TestEnvironment` при инициализации создать роль приложения без `SUPERUSER`, `CreateDatabaseAsync` создаёт базу с этим владельцем и отдаёт строку подключения этой роли; добавить административную строку подключения к той же базе для проверок, которым нужен суперпользователь.
-- [ ] В `PlatformTests` тест `Ac15_Journal_RejectsUpdateDeleteAndTruncate_EvenWhenOrdinaryTriggersAreSilencedByTheReplicaRole` перевести на административное подключение: `session_replication_role` доступен только суперпользователю.
-- [ ] Привести `DeploymentTests.cs` к новому тексту `deploy/README.md`.
+- [x] Удалить `IdentityRolesMigrationTests.cs` вместе с удалённой миграцией, как велит комментарий этого класса.
+- [x] В `TestEnvironment` при инициализации создать роль приложения без `SUPERUSER`, `CreateDatabaseAsync` создаёт базу с этим владельцем и отдаёт строку подключения этой роли; добавить административную строку подключения к той же базе для проверок, которым нужен суперпользователь.
+- [x] В `PlatformTests` тест `Ac15_Journal_RejectsUpdateDeleteAndTruncate_EvenWhenOrdinaryTriggersAreSilencedByTheReplicaRole` перевести на административное подключение: `session_replication_role` доступен только суперпользователю.
+- [x] Привести `DeploymentTests.cs` к новому тексту `deploy/README.md`.
 
 ## Вне Task-блоков
 
