@@ -39,11 +39,11 @@ AC: AC-12, AC-13.
 ### Task 2: Подтверждённый уровень в карточке кандидата
 Material risk: none
 AC: AC-1, AC-2, AC-4, AC-5, AC-6, AC-7.
-- [ ] Добавить `src/Kalibr.Promotion/ReviewConfirmedLevelResponse.cs`: `internal sealed record ReviewConfirmedLevelResponse(int Score, IReadOnlyList<ScalePoint> ScalePoints, DateTimeOffset DecidedAt, ApplicationTargetResponse Target)` с XML-комментариями. `ScalePoints` — шкала компетенции в версии той заявки: шкала может отличаться от версии текущей заявки.
-- [ ] В `ReviewCompetencyResponse` добавить параметр `ReviewConfirmedLevelResponse? ConfirmedLevel` после `Change`, с описанием в XML-комментарии.
-- [ ] В `ReviewReader.PreviousAsync` к уже отобранным заявкам `shown` (`Status == Decided`, результаты опубликованы, без рассматриваемой) дочитать `PromotionFinalScore` и вернуть третьим значением словарь `CompetencyId → ReviewConfirmedLevelResponse`: обход `shown` по убыванию `DecidedAt`, `TryAdd` по компетенции, `Target` из `facts[other.Id].Target`, шкала из `facts[other.Id].Version`. Новых запросов на другие таблицы, индексов и таблиц нет.
-- [ ] Передать значение через `DescribeAsync` в `CompetencyOf`. Расчёты `career.Score`, `DefaultFinalScores`, `RankAsync`, `ReviewResponse.History` не менять.
-- [ ] Собрать backend: `openapi/openapi.json` обновится сам; `ef-pending-changes` чист.
+- [x] Добавить `src/Kalibr.Promotion/ReviewConfirmedLevelResponse.cs`: `internal sealed record ReviewConfirmedLevelResponse(int Score, IReadOnlyList<ScalePoint> ScalePoints, DateTimeOffset DecidedAt, ApplicationTargetResponse Target)` с XML-комментариями. `ScalePoints` — шкала компетенции в версии той заявки: шкала может отличаться от версии текущей заявки.
+- [x] В `ReviewCompetencyResponse` добавить параметр `ReviewConfirmedLevelResponse? ConfirmedLevel` после `Change`, с описанием в XML-комментарии.
+- [x] В `ReviewReader.PreviousAsync` к уже отобранным заявкам `shown` (`Status == Decided`, результаты опубликованы, без рассматриваемой) дочитать `PromotionFinalScore` и вернуть третьим значением словарь `CompetencyId → ReviewConfirmedLevelResponse`: обход `shown` по убыванию `DecidedAt`, `TryAdd` по компетенции, `Target` из `facts[other.Id].Target`, шкала из `facts[other.Id].Version`. Новых запросов на другие таблицы, индексов и таблиц нет.
+- [x] Передать значение через `DescribeAsync` в `CompetencyOf`. Расчёты `career.Score`, `DefaultFinalScores`, `RankAsync`, `ReviewResponse.History` не менять.
+- [x] Собрать backend: `openapi/openapi.json` обновится сам; `ef-pending-changes` чист.
 
 ### Task 3: Подтверждённый уровень на формах и в демо
 Material risk: none

@@ -39,4 +39,4 @@ A decision whose value must survive this sprint's archival is ALSO written into 
 <!-- entries appended below this line -->
 - 2026-11-05 — settings: backward_compat none → migration (Task 1, asd-init sprint-mediated)
 - 2026-11-05 — route Task 1: mechanical, dispatch HEAD cf7b2c49
-- 2026-11-05 — route Task 2: standard, dispatch HEAD c8919226
+- 2026-11-05 — route Task 2: standard, dispatch HEAD 8531ed96
