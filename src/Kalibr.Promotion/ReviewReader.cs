@@ -41,7 +41,7 @@ internal sealed class ReviewReader(
         var artifacts = (await applications.ArtifactsAsync(application.Id, version, cancellationToken)).ToDictionary(artifact => artifact.CompetencyId);
         var mandatory = await applications.MandatoryArtifactIdsAsync(application, version, cancellationToken);
         var finals = await applications.FinalScoresAsync(application.Id, cancellationToken);
-        var (history, latest) = await PreviousAsync(application, cancellationToken);
+        var (history, latest, confirmed) = await PreviousAsync(application, cancellationToken);
         var averages = CircularRating.Averages(answers.SelectMany(group => group));
         var standing = finals.Count == 0 ? null : career.Score(version, application.LevelId, finals.ToDictionary(pair => pair.Key, pair => (decimal)pair.Value));
         var defaults = CircularRating.DefaultFinalScores(averages);
@@ -79,6 +79,7 @@ internal sealed class ReviewReader(
                 selfScores.TryGetValue(competency.Id, out var selfScore) ? selfScore : null,
                 [.. answers[competency.Id]],
                 latest,
+                confirmed.GetValueOrDefault(competency.Id),
                 artifacts.GetValueOrDefault(competency.Id),
                 mandatory.Contains(competency.Id),
                 finals.TryGetValue(competency.Id, out var finalScore) ? finalScore : null,
@@ -162,6 +163,7 @@ internal sealed class ReviewReader(
         int? selfScore,
         IReadOnlyCollection<PromotionRaterScore> answers,
         PreviousScores? latest,
+        ReviewConfirmedLevelResponse? confirmedLevel,
         ArtifactResponse? artifact,
         bool isArtifactMandatory,
         int? finalScore,
@@ -179,6 +181,7 @@ internal sealed class ReviewReader(
             selfScore,
             circular,
             ChangeOf(competency.Id, circular.Average, latest),
+            confirmedLevel,
             artifact,
             isArtifactMandatory,
             defaultFinalScore,
@@ -205,7 +208,7 @@ internal sealed class ReviewReader(
             average is { } current && previous is { } before ? Math.Round(current, 1, MidpointRounding.AwayFromZero) - Math.Round(before, 1, MidpointRounding.AwayFromZero) : null);
     }
 
-    private async Task<(IReadOnlyList<ReviewHistoryResponse> History, PreviousScores? Latest)> PreviousAsync(PromotionApplication application, CancellationToken cancellationToken)
+    private async Task<(IReadOnlyList<ReviewHistoryResponse> History, PreviousScores? Latest, IReadOnlyDictionary<Guid, ReviewConfirmedLevelResponse> Confirmed)> PreviousAsync(PromotionApplication application, CancellationToken cancellationToken)
     {
         var earlier = await context.Set<PromotionApplication>()
             .AsNoTracking()
@@ -245,7 +248,19 @@ internal sealed class ReviewReader(
         PreviousScores? latest = shown.Count == 0
             ? null
             : new PreviousScores(facts[shown[0].Id].Version.Competencies.Select(competency => competency.Id).ToHashSet(), CircularRating.Averages(answers[shown[0].Id]));
-        return (history, latest);
+        var finals = (await context.Set<PromotionFinalScore>().AsNoTracking().Where(score => shownIds.Contains(score.ApplicationId)).ToListAsync(cancellationToken))
+            .ToLookup(score => score.ApplicationId);
+        var confirmed = new Dictionary<Guid, ReviewConfirmedLevelResponse>();
+        foreach (var other in shown.OrderByDescending(other => other.DecidedAt).ThenBy(other => other.Id))
+        {
+            var scale = facts[other.Id].Version.Competencies.ToDictionary(competency => competency.Id, competency => competency.ScalePoints);
+            foreach (var score in finals[other.Id].Where(score => scale.ContainsKey(score.CompetencyId)))
+            {
+                confirmed.TryAdd(score.CompetencyId, new ReviewConfirmedLevelResponse(score.Score, scale[score.CompetencyId], other.DecidedAt!.Value, facts[other.Id].Target));
+            }
+        }
+
+        return (history, latest, confirmed);
     }
 
     /// <summary>

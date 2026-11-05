@@ -22739,6 +22739,7 @@
           "selfScore",
           "circular",
           "change",
+          "confirmedLevel",
           "artifact",
           "isArtifactMandatory",
           "defaultFinalScore",
@@ -22806,6 +22807,16 @@
               }
             ]
           },
+          "confirmedLevel": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ReviewConfirmedLevelResponse"
+              }
+            ]
+          },
           "artifact": {
             "oneOf": [
               {
@@ -22838,6 +22849,34 @@
               "null",
               "boolean"
             ]
+          }
+        }
+      },
+      "ReviewConfirmedLevelResponse": {
+        "required": [
+          "score",
+          "scalePoints",
+          "decidedAt",
+          "target"
+        ],
+        "type": "object",
+        "properties": {
+          "score": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "scalePoints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScalePoint"
+            }
+          },
+          "decidedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "target": {
+            "$ref": "#/components/schemas/ApplicationTargetResponse"
           }
         }
       },
