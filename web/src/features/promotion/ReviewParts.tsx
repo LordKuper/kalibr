@@ -76,6 +76,23 @@ export function CircularText({
   );
 }
 
+/** The level of the competency the employee already holds from an earlier decision, on one secondary line. */
+export function ConfirmedLevelText({
+  level,
+}: {
+  level: ReviewCompetency["confirmedLevel"];
+}) {
+  if (!level) return null;
+  const top = level.scalePoints.at(-1);
+  return (
+    <Typography.Text type="secondary">
+      Подтверждено: {level.score}
+      {top && ` из ${top.score}`}, {formatDate(level.decidedAt)} ·{" "}
+      {level.target.levelName}
+    </Typography.Text>
+  );
+}
+
 /** The artifacts of one competency as a list of what was done with the link to the document. */
 export function ArtifactList({
   artifact,
