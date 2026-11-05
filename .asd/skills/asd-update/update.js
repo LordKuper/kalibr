@@ -55,7 +55,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const os = require('os');
 const https = require('https');
 const { execFileSync } = require('child_process');
 const { pipeline } = require('stream/promises');
@@ -550,21 +549,32 @@ function checkTar() {
 // Fetches + extracts the upstream tarball named by manifest.repo/branch and
 // returns the extracted source root (the directory containing its own
 // `.asd/`). Caller is responsible for cleanup (cleanupFetch()).
-async function fetchUpstreamTarball(manifest) {
+// Stages under `<repoRoot>/.asd/tmp/` (self-ignoring, as runtime.js
+// scratchDir()), never the system disk's os.tmpdir(); removed on failure here.
+async function fetchUpstreamTarball(manifest, repoRoot) {
   checkTar();
   const { owner, name, branch } = upstreamRef(manifest);
   const tarUrl = `https://codeload.github.com/${owner}/${name}/tar.gz/refs/heads/${branch}`;
 
-  const work = fs.mkdtempSync(path.join(os.tmpdir(), 'asd-update-'));
-  const exdir = path.join(work, 'x');
-  fs.mkdirSync(exdir);
+  const scratch = path.join(repoRoot, '.asd', 'tmp');
+  fs.mkdirSync(scratch, { recursive: true });
+  const ignore = path.join(scratch, '.gitignore');
+  if (!fs.existsSync(ignore)) fs.writeFileSync(ignore, '*\n', 'utf8');
+  const work = fs.mkdtempSync(path.join(scratch, 'asd-update-'));
+  try {
+    const exdir = path.join(work, 'x');
+    fs.mkdirSync(exdir);
 
-  await download(tarUrl, path.join(work, 'src.tar.gz'));
-  execFileSync('tar', ['-xzf', 'src.tar.gz', '-C', 'x'], { cwd: work });
+    await download(tarUrl, path.join(work, 'src.tar.gz'));
+    execFileSync('tar', ['-xzf', 'src.tar.gz', '-C', 'x'], { cwd: work });
 
-  const top = fs.readdirSync(exdir).filter((d) => fs.statSync(path.join(exdir, d)).isDirectory());
-  if (top.length !== 1) throw new Error(`unexpected tarball layout (${top.length} top dirs)`);
-  return { sourceRoot: path.join(exdir, top[0]), workDir: work };
+    const top = fs.readdirSync(exdir).filter((d) => fs.statSync(path.join(exdir, d)).isDirectory());
+    if (top.length !== 1) throw new Error(`unexpected tarball layout (${top.length} top dirs)`);
+    return { sourceRoot: path.join(exdir, top[0]), workDir: work };
+  } catch (e) {
+    cleanupFetch(work);
+    throw e;
+  }
 }
 
 function cleanupFetch(workDir) {
@@ -608,7 +618,7 @@ async function main() {
 
   let fetched;
   try {
-    fetched = await fetchUpstreamTarball(oldManifestForFetch);
+    fetched = await fetchUpstreamTarball(oldManifestForFetch, repoRoot);
   } catch (e) {
     die(e.message);
     return;

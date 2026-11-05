@@ -1,6 +1,6 @@
 # UX Principles
 
-Applied during design-phase (ux-spec authoring); verified during design-review + impl-review by `asd-reviewer-quality` (UI conformance section).
+Applied during design-phase (ux-spec authoring); verified during design-review + impl-review by the UI conformance verifier — the Quality rubric's UI conformance section, applied by `asd-reviewer-quality` (standard impl-review) or `asd-reviewer-combined` (standard design-review, lite impl-review).
 
 ## 1. Readability over Decoration
 

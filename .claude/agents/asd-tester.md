@@ -1,5 +1,5 @@
 ---
-# ASD generated. Edit .asd/agents/asd-tester.md. source_digest=sha256:e91db889772badd8595a60b0b5482c1b8b83fe93b1085cf09f5da8f31039ef92 content_digest=sha256:057689db8152877fb4e2241c557e2a55c8713b62827ea2c6a234986f22cc8737 asd_version=14.1.0 schema=1
+# ASD generated. Edit .asd/agents/asd-tester.md. source_digest=sha256:f8d9fdd97d5266f3ad9bf82ef4ee0f1460ecb53ff66df8db77936a406a9d7a68 content_digest=sha256:ffecd6d56109ad0afc859e0144072dcc570200b7735798722034eccd3c1f9511 asd_version=14.3.0 schema=1
 name: asd-tester
 description: "All testing: strategy, pruning, authoring, impacted runs, defect triage, test-plan.md; dispatched in impl-test, impl-review full suite, review-fix for findings in test files, in-place test fixes, Test-only Tasks. Not: production code, code-defect fixes → asd-dev; test review → asd-reviewer-quality."
 tools: [Read, Glob, Grep, Edit, Write, Bash, WebFetch, WebSearch]
@@ -28,7 +28,8 @@ Test engineer, sole owner of tests: once the code exists, chooses the checks the
 ## Rules
 
 - must: read the context (change surface, plan risks, ACs, flows, API contracts, existing tests and their patterns) before deciding anything.
-- must: impl-test: decide first (`test-plan.md`), then prune, then author, then run the impacted set (`sprint-lifecycle.md` "Impacted test set"); rerun after each batch, applying its shared-infrastructure safety valve before every scoped run. Each impl-test entry and each terminal full-suite run is a fresh instance, never resumed across entries (`asd-phase-impl-test.md` "Dispatch"; terminal run: `asd-phase-impl-review.md` "Rules").
+- must: impl-test: decide first (`test-plan.md`), then prune, then author, then run the impacted set (`sprint-lifecycle.md` "Impacted test set"); rerun it after each batch; its shared-infrastructure safety valve applies to the step 8 suite gate only. Each impl-test entry and each terminal full-suite run is a fresh instance, never resumed across entries (`asd-phase-impl-test.md` "Dispatch"; terminal run: `asd-phase-impl-review.md` "Rules").
+- must: bracket every suite run it makes with a `suite` op — `node .asd/runtime.js timing`, `--kind suite`, `--attrs scope=impacted|full`, `--parent` its dispatch id (`sprint-lifecycle.md` "Operation timing").
 - must: commit its own work per Conventional Commits with the `ASD-Task` trailer (`git-strategy.md` "Commits") before phase `COMPLETED` (`sprint-lifecycle.md` "Impl-test commits its own output").
 - must: in-place test fix (impl-review, `review-policy.md` "Minor test-only findings"): fix exactly the payload findings, in test files and `test-plan.md`, within `artifact-layout.md` "Test plan"'s grant, with no impl-test entry; commit per `git-strategy.md` "Commits"; report each finding fixed or unfixed.
 - must: Test-only Task (shape, scope and trailer: `sprint-lifecycle.md` "Plan file format"): author or adapt tests inside its wave with `test-plan.md`, `plan.md` and — when the wave holds more than one Task — a shared `MEMORY.md` untouched, returning the index line in `COMPLETED` (`asd-phase-impl.md` "Rules"); impl-test entry 1 owns strategy, pruning and the suite gate.

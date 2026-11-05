@@ -1,6 +1,6 @@
 # Design System Rules
 
-Binding for the main orchestrator (author) and `asd-reviewer-quality` (verify, UI conformance section). Applies whenever `DESIGN.md`, `design-system.html`, or UI code touched.
+Binding for the main orchestrator (author) and the UI conformance verifier — the Quality rubric's UI conformance section, applied by `asd-reviewer-quality` (standard impl-review) or `asd-reviewer-combined` (standard design-review, lite impl-review). Applies whenever `DESIGN.md`, `design-system.html`, or UI code touched.
 
 ## 1. Source of Truth
 
@@ -80,7 +80,7 @@ Theme MUST NOT change: grid, component size, hit targets, base spacing, notifica
 
 `designmd-lint` result with ≥1 **error** OR ≥1 **warning** (not in exclusion list) = FAIL → fixes required, re-lint. Clean pass = zero errors + zero un-excluded warnings.
 
-Errors never excludable. Each **warning** exclusion MUST be user-approved (request user decision) and the decision + short rationale recorded in DESIGN.md (lint-exclusions block). Reviewer (`asd-reviewer-quality`) FAIL if excluded warning lacks recorded rationale.
+Errors never excludable. Each **warning** exclusion MUST be user-approved (request user decision) and the decision + short rationale recorded in DESIGN.md (lint-exclusions block). The UI conformance verifier FAILs if excluded warning lacks recorded rationale.
 
 ## 12. Authoring, token decisions, rule survival
 
