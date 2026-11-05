@@ -23,9 +23,11 @@ Phase-scoped rules go elsewhere — design constraints to `custom-design-rules.m
 
 - The system stores no financial information: salaries, salary ranges, budgets. No field, column, endpoint or screen carries it.
 
-## No backward compatibility before 1.0
+## Release compatibility
 
-- Until release 1.0 the project keeps no API backward compatibility: the contract version stays 1.0.0 and is not bumped before release; obsolete surface is deleted, never marked deprecated. The DB schema changes by incremental EF migrations, with data transfer where the working development database would otherwise fail to migrate or lose meaning; right before release the migrations are squashed into one InitialCreate and every database is recreated (`docs/architecture/stack.html` «Контракт из кода»). (`004-role-desktop-user-journeys#AC-58`, `#AC-63`)
+- The API keeps no backward compatibility: the SPA, its only consumer, ships in the same image. The contract version stays 1.0.0 and the path `/api/v1`; obsolete surface is deleted at once, never marked deprecated. This overrides `backward_compat: migration` for the API: a breaking API change needs no migration path, deprecation notice or version bump.
+- Data survives every release: the DB schema changes only forward, by incremental EF migrations over the baseline `InitialCreate`, which is never regenerated. A migration preserves existing data and transfers it where a change moves it or alters its meaning; the transfer is SQL in `Up` after the new structure is created and before the old one is dropped (`docs/architecture/stack.html` «Контракт из кода»).
+- An upgrade starts with a database backup; a rollback restores the backup and the previous image. Expand/contract is not used: one replica, `strategy: Recreate`. (`008-confirmed-levels-release-prep#AC-13`, replaces `004-role-desktop-user-journeys#AC-58`, `#AC-63`)
 
 ## Blocking project processes
 
