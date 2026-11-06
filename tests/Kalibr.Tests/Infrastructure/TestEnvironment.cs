@@ -7,14 +7,16 @@ using Xunit;
 namespace Kalibr.Tests.Infrastructure;
 
 /// <summary>
-/// The environment shared by the whole test run: one PostgreSQL container, from which every API host gets a database of its own,
-/// and one mail server that every host sends its mail to unless a test points it elsewhere.
+/// The environment shared by the whole test run: one PostgreSQL container, from which every API host gets a database of its own
+/// owned by an application role without superuser rights, as in deployment, and one mail server that every host sends its mail to unless a test points it elsewhere.
 /// Tests that only create their own data share one lazily started host; tests that need a database to themselves start another.
 /// </summary>
 public sealed class TestEnvironment : IAsyncLifetime
 {
     private const string PostgresImage = "postgres:18.6-trixie";
     private const string GssSetting = "GSS Encryption Mode=Disable";
+    private const string AppRole = "kalibr";
+    private const string AppPassword = "kalibr-test-password";
 
     /// <summary>
     /// The server's connection limit. The default of 100 runs out while the hosts of the classes that run in parallel start together
@@ -64,22 +66,38 @@ public sealed class TestEnvironment : IAsyncLifetime
         await ApiHost.StartAsync(await CreateDatabaseAsync(), WithMail(settings));
 
     /// <summary>
-    /// Creates an empty database in the shared container, for a host to migrate or for a test that migrates it step by step.
+    /// Creates an empty database owned by the application role in the shared container, for a host to migrate.
     /// </summary>
-    /// <returns>The Npgsql connection string of the new database.</returns>
-    public async Task<string> CreateDatabaseAsync()
+    /// <returns>The Npgsql connection string of the new database, as the application role.</returns>
+    private async Task<string> CreateDatabaseAsync()
     {
         var database = $"t{Guid.NewGuid():N}";
         await using (var admin = new NpgsqlConnection(container.GetConnectionString()))
         {
             await admin.OpenAsync(TestContext.Current.CancellationToken);
-            await using var create = new NpgsqlCommand($"CREATE DATABASE {database}", admin);
+            await using var create = new NpgsqlCommand($"CREATE DATABASE {database} OWNER {AppRole}", admin);
             await create.ExecuteNonQueryAsync(TestContext.Current.CancellationToken);
         }
 
-        var connectionString = new NpgsqlConnectionStringBuilder(container.GetConnectionString()) { Database = database }.ConnectionString;
+        var connectionString = new NpgsqlConnectionStringBuilder(container.GetConnectionString())
+        {
+            Database = database,
+            Username = AppRole,
+            Password = AppPassword,
+        }.ConnectionString;
         return $"{connectionString};{GssSetting}";
     }
+
+    /// <summary>
+    /// The connection string of the same database as the container's superuser, for checks that the application role is not allowed to make.
+    /// </summary>
+    /// <param name="host">The host whose database is reached.</param>
+    /// <returns>The Npgsql connection string of the host's database, as the superuser.</returns>
+    public string AdminConnectionString(ApiHost host) =>
+        new NpgsqlConnectionStringBuilder(container.GetConnectionString())
+        {
+            Database = new NpgsqlConnectionStringBuilder(host.ConnectionString).Database,
+        }.ConnectionString;
 
     /// <summary>
     /// Drops the database of a running host, so that the host stays up while its database is gone.
@@ -94,7 +112,16 @@ public sealed class TestEnvironment : IAsyncLifetime
         await drop.ExecuteNonQueryAsync(TestContext.Current.CancellationToken);
     }
 
-    public async ValueTask InitializeAsync() => await Task.WhenAll(container.StartAsync(), Mail.StartAsync());
+    public async ValueTask InitializeAsync() => await Task.WhenAll(StartContainerAsync(), Mail.StartAsync());
+
+    private async Task StartContainerAsync()
+    {
+        await container.StartAsync();
+        await using var admin = new NpgsqlConnection(container.GetConnectionString());
+        await admin.OpenAsync();
+        await using var create = new NpgsqlCommand($"CREATE ROLE {AppRole} LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE PASSWORD '{AppPassword}'", admin);
+        await create.ExecuteNonQueryAsync();
+    }
 
     public async ValueTask DisposeAsync()
     {

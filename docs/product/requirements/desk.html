@@ -14,7 +14,7 @@ responsibility:
   <meta name="subsystem" content="desk">
   <meta name="sprint-id" content="">
   <meta name="status" content="approved">
-  <meta name="updated" content="2026-10-30">
+  <meta name="updated" content="2026-11-06">
   <meta name="responsibility" content="product requirements of the desk subsystem: role desktop as the home page, expected actions and integrity checks per role, counter, user-journey scenarios, reminder e-mails, one-object-one-item rule with absorption and cause order, the expected actions of the career-move process, the Career sessions block and the announce card">
   <meta name="provenance" content="original">
   <meta name="source" content="">
@@ -210,7 +210,7 @@ responsibility:
           <span class="status-approved">approved</span>
         </div>
         <h1>Требования — Рабочий стол</h1>
-        <div class="stats">5 goals · 36 stories · 224 AC · 8 non-goals · updated 2026-10-30</div>
+        <div class="stats">5 goals · 36 stories · 224 AC · 8 non-goals · updated 2026-11-06</div>
       </header>
       <main>
 <!--
@@ -440,7 +440,7 @@ provenance: original
       <tr id="AC-118"><td><a href="#AC-118">AC-118</a></td><td>Находки AC-122…AC-152 и AC-191 вычисляются только по объектам, за которые пользователь отвечает или которые вправе видеть (руководитель — подразделения, которыми руководит; HR — подразделения ответственности; администратор — вся оргструктура; сотрудник — своя должность), и не раскрывают объекты вне этой области.</td><td><span class="chip area">доступ</span></td><td><span class="chip prio-must">must</span></td></tr>
       <tr id="AC-119"><td><a href="#AC-119">AC-119</a></td><td>Экраны стола и сценариев выполнены в стиле <code>docs/ux/DESIGN.md</code>.</td><td><span class="chip area">UI</span></td><td><span class="chip prio-must">must</span></td></tr>
       <tr id="AC-120"><td><a href="#AC-120">AC-120</a></td><td>Экраны адаптивны для desktop и tablet.</td><td><span class="chip area">UI</span></td><td><span class="chip prio-must">must</span></td></tr>
-      <tr id="AC-121"><td><a href="#AC-121">AC-121</a></td><td>Версия контракта API — 1.0.0 и до релиза 1.0 не повышается; методы стола и сценариев описаны в документации подсистемы и в OpenAPI.</td><td><span class="chip area">контракт</span></td><td><span class="chip prio-must">must</span></td></tr>
+      <tr id="AC-121"><td><a href="#AC-121">AC-121</a></td><td>Версия контракта API — 1.0.0 и не повышается: обратной совместимости у API нет, единственный потребитель — SPA из того же образа; методы стола и сценариев описаны в документации подсистемы и в OpenAPI.</td><td><span class="chip area">контракт</span></td><td><span class="chip prio-must">must</span></td></tr>
       <tr id="AC-122"><td><a href="#AC-122">AC-122</a></td><td>Вид «Должность без трека»: действующая должность из перечня подразделения, которым пользователь руководит, не связана ни с одним уровнем действующего трека этого или вышестоящего подразделения, и на неё нет матрицы должности ни в одном подразделении (AC-197). Причина: должность не связана с карьерным треком; указано число сотрудников на ней. Давность не показывается. Переход: сценарий «Связать должности с треком» (AC-162…AC-168). Действие или справочно — по AC-132.</td><td><span class="chip area">проверки</span></td><td><span class="chip prio-must">must</span></td></tr>
       <tr id="AC-123"><td><a href="#AC-123">AC-123</a></td><td>Вид «Трек без должностей»: у трека подразделения, которым пользователь руководит, нет ни одной связанной действующей должности (<a href="career-framework.html#AC-96">career-framework AC-96</a>). Причина: у трека нет связанных действующих должностей. Давность не показывается. Переход: сценарий «Связать должности с треком» (AC-162…AC-168). Действие или справочно — по AC-132.</td><td><span class="chip area">проверки</span></td><td><span class="chip prio-must">must</span></td></tr>
       <tr id="AC-124"><td><a href="#AC-124">AC-124</a></td><td>Вид «Уровень без должности»: у уровня трека подразделения нет связанной действующей должности (<a href="career-framework.html#AC-96">career-framework AC-96</a>). Причина называет трек и уровень. Давность не показывается. Переход: сценарий «Связать должности с треком» (AC-162…AC-168). Действие или справочно — по AC-132.</td><td><span class="chip area">проверки</span></td><td><span class="chip prio-must">must</span></td></tr>
@@ -677,7 +677,7 @@ provenance: original
   </ul>
 </section>
       </main>
-      <footer>by ASD workflow | 2026-10-30</footer>
+      <footer>by ASD workflow | 2026-11-06</footer>
     </div>
   </div>
 </body>

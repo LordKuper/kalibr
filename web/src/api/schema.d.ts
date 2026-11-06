@@ -4100,6 +4100,7 @@ export interface components {
             selfScore: null | number;
             circular: components["schemas"]["CircularSummaryResponse"];
             change: null | components["schemas"]["ReviewCompetencyChangeResponse"];
+            confirmedLevel: null | components["schemas"]["ReviewConfirmedLevelResponse"];
             artifact: null | components["schemas"]["ArtifactResponse"];
             isArtifactMandatory: boolean;
             /** Format: int32 */
@@ -4107,6 +4108,14 @@ export interface components {
             /** Format: int32 */
             finalScore: null | number;
             isMet: null | boolean;
+        };
+        ReviewConfirmedLevelResponse: {
+            /** Format: int32 */
+            score: number;
+            scalePoints: components["schemas"]["ScalePoint"][];
+            /** Format: date-time */
+            decidedAt: string;
+            target: components["schemas"]["ApplicationTargetResponse"];
         };
         ReviewFailedCompetencyResponse: {
             /** Format: uuid */

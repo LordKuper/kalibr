@@ -43,3 +43,32 @@ describe("demo of the career sessions (AC-44)", () => {
     }
   });
 });
+
+describe("confirmed level in the demo of the career sessions (AC-3, AC-8)", () => {
+  it.each(["Карточка кандидата", "Итоговые оценки и решение"])(
+    "shows the confirmed level of one competency only on the step «%s»",
+    { timeout: LONG_FLOW_TIMEOUT * 3 },
+    async (title) => {
+      render(
+        <Providers>
+          <MemoryRouter>
+            <DemoPage />
+          </MemoryRouter>
+        </Providers>,
+      );
+      const user = userEvent.setup();
+      const target = DEMO_STEPS.findIndex((step) => step.title === title);
+      expect(target).toBeGreaterThan(0);
+
+      for (let index = 0; index < target; index++) {
+        await user.click(screen.getByRole("button", { name: "Далее" }));
+      }
+
+      const lines = screen.getAllByText(/^Подтверждено:/);
+      expect(lines).toHaveLength(1);
+      expect(lines[0]).toHaveTextContent(
+        /^Подтверждено: 3 из 4, .+ · Разработчик$/,
+      );
+    },
+  );
+});

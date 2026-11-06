@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<!--
+responsibility:
+  owns: html shell wrap for all asd user-facing html docs
+  excludes: doc content, doc-specific structure
+  delegates_to: fragment templates (t_prd, t_adr, t_ux-spec, t_concept, t_stack, t_design-system, t_accessibility, t_retrospective)
+-->
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="ASD workflow">
+  <meta name="doc-type" content="Retrospective">
+  <meta name="subsystem" content="sprint">
+  <meta name="sprint-id" content="008-confirmed-levels-release-prep">
+  <meta name="status" content="final">
+  <meta name="updated" content="2026-11-06">
+  <meta name="responsibility" content="retro-phase analysis of the sprint — root cause per F-N entry, then deduplicated findings drafted as guardrail + home, as remediation and systemic proposals for a cheaper future sprint, both split consumer-project vs ASD-framework">
+  <meta name="provenance" content="original">
+  <meta name="source" content="">
+  <title>Ретроспектива — Sprint 008 · confirmed-levels-release-prep</title>
+  <style>
+    :root {
+      --fg: #1a1c1e; --bg: #fff; --muted: #5b6770; --accent: #0066cc;
+      --code-bg: #f4f6f8; --border: #d0d7de; --max: 1040px;
+      --card-bg: #fafbfc;
+      --ok: #1a7f37; --warn: #b35900; --danger: #cf222e; --info: #0969da; --neutral: #5b6770;
+      --ok-tint: rgba(31,136,61,0.07); --danger-tint: rgba(207,34,46,0.06);
+      --chip-must-bg: #ffebe9; --chip-must-fg: #cf222e;
+      --chip-should-bg: #fff5e1; --chip-should-fg: #9a6700;
+      --chip-may-bg: #ddf4ff; --chip-may-fg: #0969da;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fg: #e6e6e6; --bg: #0e1116; --muted: #9aa4ad; --code-bg: #161b22; --border: #30363d;
+        --card-bg: #161b22;
+        --accent: #58a6ff; --ok: #3fb950; --warn: #d29922; --danger: #f85149; --info: #79c0ff; --neutral: #8b949e;
+        --ok-tint: rgba(63,185,80,0.12); --danger-tint: rgba(248,81,73,0.10);
+        --chip-must-bg: #3b1416; --chip-must-fg: #ff7b72;
+        --chip-should-bg: #2d2410; --chip-should-fg: #e3b341;
+        --chip-may-bg: #0d2538; --chip-may-fg: #58a6ff;
+      }
+    }
+    html, body { margin: 0; padding: 0; }
+    * { box-sizing: border-box; }
+    body { font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--fg); background: var(--bg); }
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr); min-height: 100vh; }
+    .layout:has(> nav.toc) { grid-template-columns: 260px minmax(0, 1fr); }
+    nav.toc { position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto; padding: 16px 12px; border-right: 1px solid var(--border); font-size: 0.85rem; }
+    nav.toc .toc-title { font-weight: 600; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.04em; }
+    nav.toc ol { list-style: none; margin: 0; padding: 0; }
+    nav.toc li { margin: 2px 0; }
+    nav.toc a { color: var(--fg); text-decoration: none; display: block; padding: 3px 6px; border-radius: 4px; }
+    nav.toc a:hover { background: var(--code-bg); color: var(--accent); }
+    @media (max-width: 880px) { nav.toc { position: static; max-height: none; border-right: none; border-bottom: 1px solid var(--border); } }
+    @media print { nav.toc { display: none; } }
+    .content { min-width: 0; }
+    header, main, footer { max-width: var(--max); margin: 0 auto; padding: 16px 24px; }
+    header { border-bottom: 1px solid var(--border); }
+    header h1 { margin: 4px 0 8px; font-size: 1.9rem; }
+    .badges span { display: inline-block; padding: 2px 8px; margin-right: 6px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; color: var(--muted); background: var(--bg); }
+    .badges .provenance-reverse-engineered, .badges .provenance-migrated { color: var(--warn); border-color: var(--warn); }
+    .badges .status-draft       { color: var(--neutral); border-color: var(--neutral); }
+    .badges .status-in-review   { color: var(--warn);    border-color: var(--warn); }
+    .badges .status-approved    { color: var(--ok);      border-color: var(--ok); }
+    .badges .status-locked      { color: var(--info);    border-color: var(--info); }
+    .stats { margin-top: 6px; font-size: 0.85rem; color: var(--muted); }
+    .stats .chip { display: inline-block; padding: 1px 8px; margin-right: 6px; border-radius: 10px; background: var(--code-bg); border: 1px solid var(--border); }
+    @media (max-width: 880px) {
+      .layout, .layout:has(> nav.toc) { grid-template-columns: 1fr; }
+    }
+    h2, h3, h4 { line-height: 1.25; margin-top: 1.6em; }
+    h2 { border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+    a { color: var(--accent); }
+    code, pre { font-family: ui-monospace, "Cascadia Code", Menlo, monospace; }
+    code { background: var(--code-bg); padding: 1px 5px; border-radius: 3px; font-size: 0.9em; }
+    pre { background: var(--code-bg); padding: 12px; border-radius: 6px; overflow-x: auto; }
+    pre code { background: none; padding: 0; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+    th, td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; vertical-align: top; }
+    th { background: var(--code-bg); position: sticky; top: 0; z-index: 1; }
+    tbody tr:nth-child(even) td { background: var(--card-bg); }
+    blockquote { border-left: 3px solid var(--accent); margin: 0; padding: 4px 14px; color: var(--muted); }
+    .mermaid { background: var(--bg); text-align: center; margin: 16px 0; }
+    footer { color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: 32px; }
+
+    /* fragment-shared utilities */
+    .lede { font-size: 1.08rem; color: var(--fg); }
+    section.hero { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 18px; }
+    section.callout { border-left: 4px solid var(--border); padding: 8px 14px; background: var(--card-bg); border-radius: 4px; }
+    section.callout.warn { border-left-color: var(--warn); }
+    section.callout.warn h2::before { content: "⊘ "; color: var(--warn); }
+
+    ol.goal-grid { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
+    ol.goal-grid li { background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; display: flex; gap: 10px; }
+    ol.goal-grid .num { flex: 0 0 auto; font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; }
+    ol.goal-grid p { margin: 0; }
+
+    details.role-group { border: 1px solid var(--border); border-radius: 6px; margin: 8px 0; background: var(--card-bg); }
+    details.role-group > summary { cursor: pointer; padding: 8px 12px; font-weight: 600; }
+    details.role-group > summary .count { display: inline-block; margin-left: 6px; padding: 0 7px; border-radius: 10px; background: var(--code-bg); border: 1px solid var(--border); font-weight: 400; font-size: 0.8rem; color: var(--muted); }
+    details.role-group ul.stories { margin: 0; padding: 4px 16px 12px 28px; }
+    ul.stories li { margin: 4px 0; }
+    ul.stories b { color: var(--accent); font-weight: 600; }
+
+    table.ac-table td:first-child { white-space: nowrap; font-variant-numeric: tabular-nums; font-weight: 600; }
+    .chip { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 0.78rem; border: 1px solid var(--border); }
+    .chip.area { background: var(--code-bg); color: var(--muted); }
+    .chip.prio-must   { background: var(--chip-must-bg);   color: var(--chip-must-fg); border-color: var(--chip-must-fg); }
+    .chip.prio-should { background: var(--chip-should-bg); color: var(--chip-should-fg); border-color: var(--chip-should-fg); }
+    .chip.prio-may    { background: var(--chip-may-bg);    color: var(--chip-may-fg); border-color: var(--chip-may-fg); }
+
+    ul.non-goals { margin: 0; padding-left: 22px; }
+    ul.non-goals li::marker { content: "⊘  "; color: var(--warn); }
+
+    /* definition-list pattern: Purpose / Entry / Exit / Notes */
+    dl.def-list { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; margin: 8px 0; }
+    dl.def-list dt { font-weight: 600; color: var(--muted); }
+    dl.def-list dd { margin: 0; }
+
+    /* ADR */
+    .adr { border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; margin: 18px 0; background: var(--card-bg); }
+    .adr > .meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 6px; }
+    .adr h2 { margin-top: 0.4em; border-bottom: none; font-size: 1.3rem; }
+    .adr h3 { margin-top: 1.1em; border-bottom: none; font-size: 1.15rem; }
+    .status-chip { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.78rem; border: 1px solid var(--border); }
+    .status-proposed   { color: var(--warn);    border-color: var(--warn); }
+    .status-accepted   { color: var(--ok);      border-color: var(--ok); }
+    .consequences { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .consequences .pros, .consequences .cons { padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border); }
+    .consequences .pros { background: var(--ok-tint); border-left: 3px solid var(--ok); }
+    .consequences .cons { background: var(--danger-tint); border-left: 3px solid var(--danger); }
+    .consequences h4 { margin: 0 0 4px; font-size: 1rem; color: var(--muted); }
+    .consequences ul { margin: 0; padding-left: 20px; }
+    @media (max-width: 720px) { .consequences { grid-template-columns: 1fr; } }
+    ul.alt-list li { margin: 4px 0; }
+    ul.alt-list li strong { color: var(--fg); }
+
+    /* UX-spec mockup */
+    article.mockup { border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; margin: 18px 0; background: var(--card-bg); }
+    article.mockup > h3 { margin-top: 0; }
+    .mockup-preview { background: var(--bg); border: 1px dashed var(--border); border-radius: 6px; padding: 16px; margin: 10px 0; min-height: 80px; }
+    .screen-meta { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; margin: 6px 0 10px; font-size: 0.92rem; }
+    .screen-meta b { color: var(--muted); font-weight: 600; }
+
+    /* Concept */
+    .pillar-grid { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+    .pillar-grid li { background: var(--card-bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 6px; padding: 10px 12px; }
+    .pillar-grid li strong { display: block; margin-bottom: 4px; color: var(--accent); }
+    .anti-pillar-grid li { border-left-color: var(--danger); }
+    .anti-pillar-grid li strong { color: var(--danger); }
+    ul.user-segments { list-style: none; padding: 0; }
+    ul.user-segments li { padding: 8px 12px; margin: 6px 0; border-left: 3px solid var(--accent); background: var(--card-bg); border-radius: 4px; }
+    ul.user-segments li b { color: var(--accent); }
+    ul.metrics li { margin: 4px 0; }
+    ul.metrics li .target { float: right; color: var(--ok); font-variant-numeric: tabular-nums; }
+
+    /* Stack */
+    table.tech-table .ver { font-variant-numeric: tabular-nums; color: var(--muted); }
+    .principle-list { list-style: none; padding: 0; }
+    .principle-list li { background: var(--card-bg); border: 1px solid var(--border); border-left: 3px solid var(--info); border-radius: 6px; padding: 8px 12px; margin: 6px 0; }
+    .principle-list li strong { color: var(--info); }
+
+    /* Accessibility */
+    section.a11y-domain { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 18px; margin: 14px 0; }
+    section.a11y-domain h2 { border-bottom: 1px dashed var(--border); }
+    .limitation { background: var(--chip-should-bg); border-left: 3px solid var(--warn); padding: 8px 12px; margin: 6px 0; border-radius: 4px; }
+    .limitation b { color: var(--warn); }
+
+    /* Design system */
+    .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+    .swatch { background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px; }
+    .swatch .chip-color { height: 80px; border-radius: 4px; border: 1px solid var(--border); }
+    .swatch code { font-size: 0.78rem; }
+    .swatch small { color: var(--muted); }
+    .spacing-scale { display: flex; align-items: flex-end; gap: 8px; padding: 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--card-bg); }
+    .spacing-scale > div { background: var(--accent); width: 24px; border-radius: 2px 2px 0 0; }
+    article.component-preview { border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; margin: 14px 0; background: var(--card-bg); }
+    .preview { padding: 16px; border: 1px dashed var(--border); border-radius: 6px; background: var(--bg); }
+
+    @media print {
+      .layout, .layout:has(> nav.toc) { grid-template-columns: 1fr; }
+      a { color: inherit; text-decoration: none; }
+      footer { page-break-before: always; }
+      details.role-group[open] > summary { list-style: none; }
+      details.role-group { break-inside: avoid; }
+      tr, li { break-inside: avoid; }
+    }
+  </style>
+
+</head>
+<body>
+  <div class="layout">
+    <nav class="toc">
+      <div class="toc-title">Содержание</div>
+      <ol>
+        <li><a href="#outcome">Outcome</a></li>
+        <li><a href="#analysis">Analysis</a></li>
+        <li><a href="#actions">Actions</a></li>
+        <li><a href="#systemic-proposals">Systemic proposals</a></li>
+        <li><a href="#duration">Duration</a></li>
+      </ol>
+    </nav>
+    <div class="content">
+      <header>
+        <div class="badges">
+          <span>Retrospective</span>
+          <span>sprint</span>
+          <span class="status-final">final</span>
+        </div>
+        <h1>Ретроспектива — Sprint 008 · confirmed-levels-release-prep</h1>
+        <div class="stats"><span class="chip">7 entries</span><span class="chip">8 actions</span><span class="chip">1 systemic proposal</span><span class="chip">updated 2026-11-06</span></div>
+      </header>
+      <main><section id="outcome" class="hero">
+  <h2>Outcome</h2>
+  <p class="lede">Разобрано 7 записей: 2 действия проекта, 6 действий фреймворка (одно закрыто существующим правилом), 1 системное предложение. Основная стоимость спринта — чтение диффа первой итерации ревью и цикл из-за оценки <code>critical</code> у правки в тесте (F-4). Все четыре ожидания пользователя были неизбежны.</p>
+</section>
+<section id="analysis">
+  <h2>Analysis</h2>
+  <table>
+    <thead>
+      <tr><th>Entry</th><th>Root cause</th><th>Scope</th></tr>
+    </thead>
+    <tbody>
+      <tr id="F-1"><td><a href="#F-1">F-1</a></td><td>Команда закрывает все открытые операции и не знает, идёт ли работа сейчас; запуск вне потока возобновления ничем не ограничен.</td><td><span class="chip area">asd</span></td></tr>
+      <tr id="F-2"><td><a href="#F-2">F-2</a></td><td>Раздел «Failure triage» описывает только упавшие тесты: для расхождения с AC без упавшего теста у тестировщика нет класса, и решение о допустимости осталось за ним.</td><td><span class="chip area">asd</span></td></tr>
+      <tr id="F-3"><td><a href="#F-3">F-3</a></td><td>Правило запрещает тестировщику review-fix удалять тесты, а маршрутизация находок этого не учитывает и отправляет такую находку в ту же цепочку.</td><td><span class="chip area">asd</span></td></tr>
+      <tr id="F-4"><td><a href="#F-4">F-4</a></td><td>Два правила сталкиваются: чек-лист делает любую находку <code>critical</code>, а минорный путь по той же оценке закрыт, хотя обязательность исправления от маршрута не зависит.</td><td><span class="chip area">asd</span></td></tr>
+      <tr id="F-5"><td><a href="#F-5">F-5</a></td><td>Длина темы проверяется только чтением правила, в команде коммита проверки нет, а шаблоны с переменной частью в 50 символов не укладываются.</td><td><span class="chip area">both</span></td></tr>
+      <tr id="F-6"><td><a href="#F-6">F-6</a></td><td>Причина не установлена: сбой один, не повторился, кода спринта не касается.</td><td><span class="chip area">consumer</span></td></tr>
+      <tr id="F-7"><td><a href="#F-7">F-7</a></td><td>Обновление фреймворка снимает агента, но его каталог памяти остаётся без владельца.</td><td><span class="chip area">asd</span></td></tr>
+    </tbody>
+  </table>
+</section>
+<section id="actions">
+  <h2>Actions</h2>
+  <table>
+    <thead>
+      <tr><th>Addresses</th><th>Guardrail</th><th>Acts on</th><th>Home</th></tr>
+    </thead>
+    <tbody>
+      <tr id="A-1"><td><a href="#F-1">F-1</a></td><td>covered by: <code>asd-sprint</code> Step 2B (<code>timing-recover</code> выполняется только в потоке возобновления, до входа в фазу)</td><td><span class="chip area">asd</span></td><td><code>upstream ASD: .asd/skills/asd-sprint/SKILL.md</code></td></tr>
+      <tr id="A-2"><td><a href="#F-2">F-2</a></td><td>Расхождение с критерием приёмки, найденное без упавшего теста, тестировщик записывает строкой <code>D-N</code>; оценивать его как допустимое он не вправе</td><td><span class="chip area">asd</span></td><td><code>upstream ASD: .asd/agents/asd-tester.md</code></td></tr>
+      <tr id="A-3"><td><a href="#F-3">F-3</a></td><td>При разборе находок review-fix сразу передавать находку на удаление теста в следующий вход impl-test, не отправляя её тестировщику review-fix</td><td><span class="chip area">asd</span></td><td><code>upstream ASD: .asd/workflows/asd-phase-impl.md</code></td></tr>
+      <tr id="A-4"><td><a href="#F-4">F-4</a></td><td>Находку чек-листа, все локации которой в тестах и которая не меняет поведения, исправлять минорным путём: она остаётся обязательной, но оценка <code>critical</code> не закрывает исправление на месте</td><td><span class="chip area">asd</span></td><td><code>upstream ASD: .asd/rules/review-policy.md</code></td></tr>
+      <tr id="A-5"><td><a href="#F-5">F-5</a></td><td>Проверять длину темы в одной команде коммита до <code>git commit</code>, а шаблонные темы укладывать в 50 символов при любой фазе и любом slug</td><td><span class="chip area">asd</span></td><td><code>upstream ASD: .asd/rules/git-strategy.md</code></td></tr>
+      <tr id="A-6"><td><a href="#F-5">F-5</a></td><td>Считать длину темы коммита до <code>git commit</code>: агент не может исправить её после (тестировщику это уже записано в его памяти)</td><td><span class="chip area">consumer</span></td><td><code>.claude/agent-memory/asd-dev/</code></td></tr>
+      <tr id="A-7"><td><a href="#F-6">F-6</a></td><td>Сбой <code>dotnet test</code> с «Handshake failures» без упавших тестов повторять один раз и только затем разбирать как красный прогон</td><td><span class="chip area">consumer</span></td><td><code>.claude/agent-memory/asd-tester/</code></td></tr>
+      <tr id="A-8"><td><a href="#F-7">F-7</a></td><td>Выпуск фреймворка, снимающий агента, удаляет его каталог памяти или переносит записи новому владельцу</td><td><span class="chip area">asd</span></td><td><code>upstream ASD: .asd/migrations/</code></td></tr>
+    </tbody>
+  </table>
+</section>
+<section id="systemic-proposals">
+  <h2>Systemic proposals</h2>
+  <table>
+    <thead>
+      <tr><th>Guardrail</th><th>Acts on</th><th>Home</th><th>Expected saving</th></tr>
+    </thead>
+    <tbody>
+      <tr id="P-1"><td>В манифесте ревью сворачивать удаление целых сгенерированных файлов в одну строку со счётом строк; рецензенты читают только остаток диффа</td><td><span class="chip area">asd</span></td><td><code>upstream ASD: .asd/runtime.js</code></td><td>Первая итерация ревью: 1,27 МБ из 1,36 МБ диффа (94 %) — миграции со снимками модели, почти целиком удаление; превышение итерации 7 мин 48 с и токены на чтение удаления</td></tr>
+    </tbody>
+  </table>
+</section>
+<section id="duration">
+  <h2>Duration</h2>
+  <h3>Summary</h3>
+  <table>
+    <thead>
+      <tr><th>Measure</th><th>Key</th><th>Time</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>wall</td><td>—</td><td>17 ч 20 мин</td></tr>
+      <tr><td>machine</td><td>—</td><td>2 ч 15 мин</td></tr>
+      <tr><td>user-wait</td><td>—</td><td>19 мин 8 с</td></tr>
+      <tr><td>unaccounted</td><td>—</td><td>14 ч 46 мин</td></tr>
+      <tr><td>phase</td><td>scope (1)</td><td>23 мин 34 с</td></tr>
+      <tr><td>phase</td><td>audit (1)</td><td>3 мин 46 с</td></tr>
+      <tr><td>phase</td><td>plan (1)</td><td>3 мин 21 с</td></tr>
+      <tr><td>phase</td><td>impl (5)</td><td>31 мин 48 с</td></tr>
+      <tr><td>phase</td><td>impl-test (4)</td><td>1 ч 1 мин</td></tr>
+      <tr><td>phase</td><td>impl-review (3)</td><td>24 мин 11 с</td></tr>
+      <tr><td>phase</td><td>design-promote (1)</td><td>6 мин 34 с</td></tr>
+      <tr><td>phase</td><td>cleanup (1)</td><td>28 с</td></tr>
+      <tr><td>kind</td><td>user-wait (4)</td><td>19 мин 8 с</td></tr>
+      <tr><td>kind</td><td>phase (17)</td><td>2 ч 34 мин</td></tr>
+      <tr><td>kind</td><td>dispatch (20)</td><td>1 ч 55 мин</td></tr>
+      <tr><td>kind</td><td>suite (31)</td><td>46 мин 52 с</td></tr>
+      <tr><td>kind</td><td>external-review (1)</td><td>6 мин 23 с</td></tr>
+      <tr><td>kind</td><td>review-iteration (3)</td><td>17 мин 1 с</td></tr>
+      <tr><td>agent/tier/model</td><td>asd-dev-mechanical · mechanical · haiku (1)</td><td>55 с</td></tr>
+      <tr><td>agent/tier/model</td><td>asd-dev · standard · sonnet (8)</td><td>17 мин 2 с</td></tr>
+      <tr><td>agent/tier/model</td><td>asd-tester (8)</td><td>1 ч 21 мин</td></tr>
+      <tr><td>agent/tier/model</td><td>asd-external-review (1)</td><td>6 мин 23 с</td></tr>
+      <tr><td>agent/tier/model</td><td>asd-reviewer-combined (3)</td><td>16 мин 23 с</td></tr>
+      <tr><td>rework</td><td>повторные входы (9: impl#2, impl#3, impl-test#2, impl#4, impl-test#3, impl-review#2, impl#5, impl-test#4, impl-review#3)</td><td>50 мин 20 с</td></tr>
+      <tr><td>rework</td><td>прерванные операции (2: impl#2, D-1)</td><td>7 с</td></tr>
+      <tr><td>baseline median</td><td>phase scope (5 спринтов)</td><td>45 мин 26 с</td></tr>
+      <tr><td>baseline median</td><td>phase audit (5 спринтов)</td><td>14 мин 56 с</td></tr>
+      <tr><td>baseline median</td><td>phase plan (5 спринтов)</td><td>14 мин 15 с</td></tr>
+      <tr><td>baseline median</td><td>phase impl (5 спринтов)</td><td>2 д 10 ч</td></tr>
+      <tr><td>baseline median</td><td>phase impl-test (5 спринтов)</td><td>2 ч 21 мин</td></tr>
+      <tr><td>baseline median</td><td>phase impl-review (5 спринтов)</td><td>1 ч 25 мин</td></tr>
+      <tr><td>baseline median</td><td>phase design-promote (5 спринтов)</td><td>19 мин 56 с</td></tr>
+      <tr><td>baseline median</td><td>phase pr (5 спринтов)</td><td>4 мин 35 с</td></tr>
+      <tr><td>baseline median</td><td>phase retro (4 спринтов)</td><td>4 мин 10 с</td></tr>
+      <tr><td>baseline median</td><td>phase cleanup (3 спринтов)</td><td>3 мин 56 с</td></tr>
+    </tbody>
+  </table>
+  <h3>Slow set</h3>
+  <table>
+    <thead>
+      <tr><th>Operation</th><th>Duration</th><th>Excess</th><th>Cause</th><th>Row</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>dispatch, impl-review, combined iter-01</td><td>9 мин 49 с</td><td>7 мин 48 с</td><td>Первая итерация читала весь дифф спринта, 94 % которого — миграции со снимками модели, почти целиком удаление.</td><td><a href="#P-1">P-1</a></td></tr>
+      <tr><td>external-review, impl-review, iter-01</td><td>6 мин 23 с</td><td>0 с</td><td>Внешний рецензент читал тот же дифф, единственный запуск.</td><td><a href="#P-1">P-1</a></td></tr>
+      <tr><td>suite, impl-review, терминальный полный прогон</td><td>4 мин 56 с</td><td>4 мин 2 с</td><td>Обязательный полный прогон: 954 теста backend на Testcontainers и 854 теста web.</td><td></td></tr>
+      <tr><td>suite, impl-test, backend на шлюзе входа 1</td><td>4 мин 42 с</td><td>3 мин 47 с</td><td>Спринт изменил тестовую инфраструктуру и базовую миграцию, поэтому охват полный.</td><td></td></tr>
+      <tr><td>dispatch, impl-review, combined iter-02</td><td>4 мин 10 с</td><td>2 мин 8 с</td><td>Повторное чтение дельты после шести исправлений.</td><td></td></tr>
+    </tbody>
+  </table>
+  <h3>User waits</h3>
+  <table>
+    <thead>
+      <tr><th>Wait</th><th>Duration</th><th>Avoidable</th><th>Cause</th><th>Row</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>scope, выбор workflow</td><td>2 мин 59 с</td><td>no</td><td>Выбор фиксируется в спринте и принадлежит пользователю.</td><td></td></tr>
+      <tr><td>scope, интервью о требованиях</td><td>2 мин 45 с</td><td>no</td><td>Правила подтверждения и данные известны только пользователю.</td><td></td></tr>
+      <tr><td>scope, выбор подхода</td><td>3 мин 24 с</td><td>no</td><td>Хранение подтверждений и права БД — решения пользователя.</td><td></td></tr>
+      <tr><td>scope, принятие скоупа</td><td>10 мин 0 с</td><td>no</td><td>Принятие разрешило удалить 15 миграций и отправить тег <code>v1.0.0</code>.</td><td></td></tr>
+    </tbody>
+  </table>
+</section>
+</main>
+      <footer>by ASD workflow | 2026-11-06 | sprint 008-confirmed-levels-release-prep</footer>
+    </div>
+  </div>
+</body>
+</html>

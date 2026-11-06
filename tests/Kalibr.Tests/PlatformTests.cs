@@ -211,12 +211,12 @@ public sealed class PlatformTests(TestEnvironment environment)
         var host = await environment.SharedHostAsync();
         await (await host.AdminAsync()).CreateUnitAsync();
 
-        await using var connection = new NpgsqlConnection(host.ConnectionString);
+        await using var connection = new NpgsqlConnection(environment.AdminConnectionString(host));
         await connection.OpenAsync(TestContext.Current.CancellationToken);
         await using var transaction = await connection.BeginTransactionAsync(TestContext.Current.CancellationToken);
         await ExecuteAsync(connection, "SET LOCAL session_replication_role = replica");
         var rejection = await FluentActions.Awaiting(() => ExecuteAsync(connection, statement)).Should().ThrowAsync<PostgresException>(
-            "the application account may switch to the replica role, which silences every trigger not enabled always");
+            "a superuser may switch to the replica role, which silences every trigger not enabled always");
 
         rejection.Which.SqlState.Should().Be(RestrictViolation);
     }

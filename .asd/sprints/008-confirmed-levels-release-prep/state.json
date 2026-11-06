@@ -1,0 +1,180 @@
+{
+  "sprint_id": "008-confirmed-levels-release-prep",
+  "branch": "sprint/008-confirmed-levels-release-prep",
+  "phase": "pr",
+  "workflow": "lite",
+  "documents": {
+    "audit": true,
+    "prd": true,
+    "ux_spec": false,
+    "design_system": true,
+    "adr": true,
+    "c4": true
+  },
+  "cleanup": true,
+  "user_gates": "adaptive",
+  "gate_decisions": [
+    {
+      "gate": "workflow choice",
+      "decision_actor": "user",
+      "reason": "lite",
+      "evidence": "decisions-log.md 2026-11-05 workflow",
+      "artifact_revision": "c5b08ab4"
+    },
+    {
+      "gate": "approach choice",
+      "decision_actor": "user",
+      "reason": "A + D; publication moment; forward-only with backup",
+      "evidence": "research.md Approaches Chosen",
+      "artifact_revision": "research.md stage c"
+    },
+    {
+      "gate": "scope",
+      "decision_actor": "user",
+      "reason": "accept as one sprint, no split; AC-9 migration file deletion and AC-20 tag push authorized; cost 0 iterations/0 fix rounds",
+      "evidence": "sprint.md AC-1..AC-20",
+      "artifact_revision": "sprint.md accepted 2026-11-05"
+    },
+    {
+      "gate": "audit",
+      "decision_actor": "orchestrator",
+      "reason": "adaptive: all AC deliverable; two contradictions settled by accepted scope and project rule; no subsystem, document-skip or unresolved gate pending",
+      "evidence": "audit.md",
+      "artifact_revision": "audit.md 2026-11-05"
+    },
+    {
+      "gate": "plan",
+      "decision_actor": "orchestrator",
+      "reason": "adaptive: every Task traces to user-accepted AC and the chosen approach; settings pair authorized by AC-12; no stub or new dependency; migration deletion authorized at scope",
+      "evidence": "plan.md; sprint.md AC-1..AC-20; research.md Chosen",
+      "artifact_revision": "plan.md 2026-11-05"
+    },
+    {
+      "gate": "initial impl assessment",
+      "decision_actor": "orchestrator",
+      "reason": "adaptive: all Tasks trace to accepted AC; flagged choices change no stated predicate or contract; no stub or new dependency",
+      "evidence": "plan.md all ticked; build, lint, check:api, ef pending clean at 213eb654; round diff in authorized paths",
+      "artifact_revision": "213eb654"
+    },
+    {
+      "gate": "impl-review green handoff",
+      "decision_actor": "orchestrator",
+      "reason": "adaptive: both reviewers APPROVE, terminal full suite green, no waiver or debt",
+      "evidence": "reviews/impl/wave-1/iter-03/combined.md; iter-01/external.md; test-plan.md Suite run",
+      "artifact_revision": "ffd44818"
+    },
+    {
+      "gate": "decomposition",
+      "decision_actor": "orchestrator",
+      "reason": "adaptive: no new or changed subsystem boundary; confirmed level stays inside promotion, release rules live in the platform core",
+      "evidence": "audit.md Subsystems map; git diff -- docs/architecture/subsystems.md (empty)",
+      "artifact_revision": "docs/architecture/subsystems.md"
+    },
+    {
+      "gate": "PR publication",
+      "decision_actor": "orchestrator",
+      "reason": "adaptive: DoD met (plan 32/32, wave 1/1 iter-03 combined APPROVE, external APPROVE, full suite green at 7d3b3725, no code path changed since, retro written, stubs none); scope authority — user-accepted sprint.md AC-1..AC-20; gh authenticated with push access",
+      "evidence": "test-plan.md Suite run; state.json reviews.impl; git diff 7d3b3725...HEAD (docs, CHANGELOG only)",
+      "artifact_revision": "PR #14"
+    }
+  ],
+  "task_routing": {
+    "Task 1": {
+      "execution": "agent",
+      "tier": "mechanical",
+      "reason": "artifact-risk:project rule swap",
+      "resolved_model": "haiku"
+    },
+    "Task 2": {
+      "execution": "agent",
+      "tier": "standard",
+      "reason": "normal",
+      "resolved_model": "sonnet"
+    },
+    "Task 3": {
+      "execution": "agent",
+      "tier": "standard",
+      "reason": "normal",
+      "resolved_model": "sonnet"
+    },
+    "Task 5": {
+      "execution": "agent",
+      "tier": "standard",
+      "reason": "risk:security",
+      "resolved_model": "sonnet"
+    },
+    "Task 6": {
+      "execution": "agent",
+      "tier": "standard",
+      "reason": "normal",
+      "resolved_model": "sonnet"
+    },
+    "Task 4": {
+      "execution": "agent",
+      "tier": "standard",
+      "reason": "risk:migration",
+      "resolved_model": "sonnet"
+    },
+    "D-1": {
+      "execution": "agent",
+      "tier": "standard",
+      "reason": "risk:migration",
+      "resolved_model": "sonnet"
+    },
+    "wave-1/iter-01 F1,F2,F6": {
+      "execution": "agent",
+      "tier": "standard",
+      "reason": "normal",
+      "resolved_model": "sonnet"
+    }
+  },
+  "skipped_phases": [],
+  "reviews": {
+    "design": {
+      "iteration": 0,
+      "verdicts": {},
+      "latched": {}
+    },
+    "impl": {
+      "wave": 1,
+      "waves": [
+        {
+          "iteration": 3,
+          "verdicts": {
+            "iter-01": {
+              "combined": "CONCERNS",
+              "external": "APPROVE"
+            },
+            "iter-02": {
+              "combined": "CONCERNS",
+              "external": "APPROVE"
+            },
+            "iter-03": {
+              "combined": "APPROVE",
+              "external": "APPROVE"
+            }
+          },
+          "iteration_heads": {
+            "iter-01": "1a0c4884dff6070bfd456c5f306ff56624e6ba94",
+            "iter-02": "3cfe2838fadbb204fd82eb1c2e18cebbb5d99833",
+            "iter-03": "846a58d9776c11ffb091e88b85387f646b6a5ca3"
+          },
+          "latched": {
+            "external": 1,
+            "combined": 3
+          }
+        }
+      ]
+    }
+  },
+  "created_at": "2026-11-05T15:12:22.117Z",
+  "updated_at": "2026-11-06T08:36:23.066Z",
+  "review_fixes_pending": null,
+  "test_defects_pending": null,
+  "pr": {
+    "number": 14,
+    "url": "https://github.com/LordKuper/kalibr/pull/14",
+    "state": "open"
+  },
+  "archived_at": null
+}

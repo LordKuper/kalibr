@@ -50,8 +50,9 @@ JSON не допускает комментариев, поэтому огово
 
 | Где | Что задано |
 |---|---|
-| `deploy/dev/docker-compose.yml` | пользователь, пароль и имя БД (`POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`) |
-| `src/Kalibr.Api/Properties/launchSettings.json` | `ConnectionStrings__Default` с тем же паролем (`GSS Encryption Mode=Disable` — причина в `deploy/secret.template.yaml`); `Bootstrap__AdminEmail`, `Bootstrap__AdminPassword` |
+| `deploy/dev/docker-compose.yml` | суперпользователь `postgres` для обслуживания (`POSTGRES_USER`, `POSTGRES_PASSWORD`), имя БД (`POSTGRES_DB`), пароль роли приложения `kalibr` (`KALIBR_DB_PASSWORD`) |
+| `deploy/dev/db-init.sh` | создаёт роль `kalibr` без прав суперпользователя и делает её владельцем БД `kalibr`; выполняется один раз, на пустом томе |
+| `src/Kalibr.Api/Properties/launchSettings.json` | `ConnectionStrings__Default` от имени роли `kalibr` с её паролем (`GSS Encryption Mode=Disable` — причина в `deploy/secret.template.yaml`); `Bootstrap__AdminEmail`, `Bootstrap__AdminPassword` |
 | `src/Kalibr.Api/appsettings.Development.json` | `Smtp:*` — перехватчик без шифрования и аутентификации; `App:PublicBaseUrl` — адрес Vite |
 
 ## Почта
@@ -76,9 +77,21 @@ dotnet user-secrets set "Smtp:Password" "<пароль из Mailtrap>" --project
 
 Вернуться к Mailpit: `dotnet user-secrets clear --project src/Kalibr.Api` (удаляет все секреты проекта) или `dotnet user-secrets remove "Smtp:Host" --project src/Kalibr.Api` и так для каждого ключа `Smtp:*`. Секреты в репозиторий не попадают.
 
-## База, созданная до входа по e-mail
+## Пересоздание тома БД (разово)
 
-Как войти в такую базу — в «Поведение при старте» `deploy/README.md` (обновление существующего развёртывания). Локально проще начать с чистой БД: `docker compose -f deploy/dev/docker-compose.yml down -v`.
+Том `kalibr-dev-pgdata`, созданный до версии 1.0.0, нужно пересоздать один раз: линия миграций начинается заново с `InitialCreate`, а роль `kalibr` без прав суперпользователя создаётся скриптом `db-init.sh` только на пустом томе. Данные тома пропадают. Агенты этих команд не выполняют — пользователь запускает их сам:
+
+1. Остановить отладку в Visual Studio (Shift+F5).
+2. Удалить контейнеры проекта вместе с томом:
+
+   ```
+   docker compose -f deploy/dev/docker-compose.yml down -v
+   ```
+
+   Если том остался (его держал ещё какой-то контейнер), удалить его отдельно: `docker volume rm kalibr-dev-pgdata`.
+3. Запустить профиль `Everything` или `API` (F5): пустой том инициализируется заново, `db-init.sh` создаёт роль, API применяет `InitialCreate` и создаёт администратора из `launchSettings.json`.
+
+`launchSettings.json` не меняется: имя роли и пароль прежние.
 
 ## Остановка БД
 

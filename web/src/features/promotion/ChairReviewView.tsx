@@ -32,6 +32,7 @@ import {
   ArtifactsToggle,
   ChangeText,
   CircularText,
+  ConfirmedLevelText,
   HistoryPanel,
   RatingBasis,
   type ReviewCompetency,
@@ -96,11 +97,14 @@ export function ChairReviewView({
       title: "Компетенция",
       key: "name",
       render: (_, competency) => (
-        <Flex align="center" gap="small" wrap>
-          <span>{competency.name}</span>
-          {competency.type === "Critical" && (
-            <Tag color="warning">Критическая</Tag>
-          )}
+        <Flex vertical>
+          <Flex align="center" gap="small" wrap>
+            <span>{competency.name}</span>
+            {competency.type === "Critical" && (
+              <Tag color="warning">Критическая</Tag>
+            )}
+          </Flex>
+          <ConfirmedLevelText level={competency.confirmedLevel} />
         </Flex>
       ),
     },

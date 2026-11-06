@@ -86,6 +86,11 @@ interface CompetencyRow {
   block: Review["competencies"][number]["block"];
   artifact?: { links: { description: string; url: string }[] };
   isArtifactMandatory?: boolean;
+  confirmedLevel: {
+    score: number;
+    decidedAt: string;
+    levelName: string;
+  } | null;
 }
 
 const BLOCK_PROFESSIONAL = {
@@ -127,6 +132,11 @@ const DESIGN: CompetencyRow = {
     ],
   },
   isArtifactMandatory: true,
+  confirmedLevel: {
+    score: 3,
+    decidedAt: "2025-10-15T10:00:00Z",
+    levelName: "Разработчик",
+  },
 };
 const QUALITY: CompetencyRow = {
   id: "demo-quality",
@@ -155,6 +165,7 @@ const QUALITY: CompetencyRow = {
       },
     ],
   },
+  confirmedLevel: null,
 };
 const TEAMWORK: CompetencyRow = {
   id: "demo-teamwork",
@@ -170,6 +181,7 @@ const TEAMWORK: CompetencyRow = {
     distribution: [{ score: 3, count: 4 }],
     notObservedCount: 1,
   },
+  confirmedLevel: null,
 };
 const COMPETENCIES = [DESIGN, QUALITY, TEAMWORK];
 
@@ -721,6 +733,16 @@ function review(overrides: Partial<Review>): Review {
       selfScore: row.selfScore,
       circular: row.circular,
       change: null,
+      confirmedLevel: row.confirmedLevel && {
+        score: row.confirmedLevel.score,
+        scalePoints: SCALE,
+        decidedAt: row.confirmedLevel.decidedAt,
+        target: {
+          ...TARGET,
+          levelId: "demo-level-middle",
+          levelName: row.confirmedLevel.levelName,
+        },
+      },
       artifact: row.artifact
         ? { competencyId: row.id, competencyName: row.name, ...row.artifact }
         : null,

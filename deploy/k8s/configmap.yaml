@@ -35,6 +35,25 @@ metadata:
     app.kubernetes.io/name: db
     app.kubernetes.io/part-of: kalibr
 data:
-  # Must match Database and Username in ConnectionStrings__Default of the Secret.
-  POSTGRES_USER: kalibr
+  # Cluster superuser, for maintenance only: the app never connects with it (its password is POSTGRES_PASSWORD of the Secret).
+  POSTGRES_USER: postgres
+  # Must match Database in ConnectionStrings__Default of the Secret and the database name in db-init.
   POSTGRES_DB: kalibr
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-init
+  labels:
+    app.kubernetes.io/name: db
+    app.kubernetes.io/part-of: kalibr
+data:
+  # Runs once, on the first start of an empty data volume: creates the role the app connects with and makes it the owner of
+  # the database. Role name must match Username in ConnectionStrings__Default of the Secret. The password reaches psql as a
+  # variable, so it is quoted by psql; the heredoc is quoted so that the shell leaves :'app_password' alone.
+  10-app-role.sh: |
+    #!/bin/sh
+    psql -v ON_ERROR_STOP=1 -v app_password="$KALIBR_DB_PASSWORD" --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<'SQL'
+    CREATE ROLE kalibr LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE PASSWORD :'app_password';
+    ALTER DATABASE kalibr OWNER TO kalibr;
+    SQL
