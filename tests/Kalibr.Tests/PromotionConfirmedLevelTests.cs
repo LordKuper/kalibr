@@ -171,7 +171,7 @@ public sealed class PromotionConfirmedLevelTests(PromotionHost fixture) : IClass
         ConfirmedOf(card, kit.Critical.Id)!["score"]!.GetValue<int>().Should().Be(2, "a competency the latest application had is confirmed by it");
     }
 
-    private static async Task<Guid> PublishVersionAsync(PromotionScene scene, JsonNode content)
+    private static async Task PublishVersionAsync(PromotionScene scene, JsonNode content)
     {
         var kit = scene.Kit;
         var version = (await kit.Author.PostAsync($"/api/v1/career/matrices/{kit.MatrixId}/versions")).Expect(HttpStatusCode.Created).Json!["id"]!.GetValue<Guid>();
@@ -179,7 +179,6 @@ public sealed class PromotionConfirmedLevelTests(PromotionHost fixture) : IClass
         (await kit.TransitAsync(scene.Org.TeamHead.Client, "submit", versionId: version)).Expect(HttpStatusCode.OK);
         (await kit.TransitAsync(scene.Org.DepartmentHead.Client, "approve", versionId: version)).Expect(HttpStatusCode.OK);
         (await kit.TransitAsync(scene.Org.Hr.Client, "approve", versionId: version)).Expect(HttpStatusCode.OK);
-        return version;
     }
 
     private static async Task<ApiResponse> ReviewAsync(ApiClient who, Guid applicationId) =>
