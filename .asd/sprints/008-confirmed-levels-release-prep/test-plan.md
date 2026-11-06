@@ -107,7 +107,7 @@ Code defects found by the suite. Resolved in `impl` test-fix mode. `Entry` throu
 
 | ID | Entry | Location | Symptom | Failing test | Status | Fix commit |
 |---|---|---|---|---|---|---|
-| D-1 | 1 | src/Kalibr.Platform/Migrations/20261105155028_InitialCreate.cs | Шесть колонок без DEFAULT false, в старой линии он есть: promotion_applications.artifacts_missing, is_sent_to_review, review_letter_pending, was_held_at_close; promotion_waves.no_chair_letter_sent, versions_fixed | Разовая проверка A, сравнение схем AC-9 | pending | |
+| D-1 | 1 | src/Kalibr.Platform/Migrations/20261105155028_InitialCreate.cs | Шесть колонок без DEFAULT false, в старой линии он есть: promotion_applications.artifacts_missing, is_sent_to_review, review_letter_pending, was_held_at_close; promotion_waves.no_chair_letter_sent, versions_fixed | Разовая проверка A, сравнение схем AC-9 | fixed | 4764e08c |
 
 ## Manual verification (optional)
 
