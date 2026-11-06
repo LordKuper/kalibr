@@ -104,13 +104,13 @@ kubectl -n kalibr rollout status deployment/app
 
 Порядок обновления:
 
-1. Резервная копия `pg_dump` до любых изменений в кластере; копию хранить вне кластера и вне PVC:
+1. Собрать, просканировать и перенести новые образы (разделы 1 и 2).
+2. Резервная копия `pg_dump` непосредственно перед `kubectl apply`, до любых изменений в кластере: чем она свежее, тем меньше записей теряется при откате. Копию хранить вне кластера и вне PVC:
 
    ```
    kubectl -n kalibr exec statefulset/db -- sh -c 'pg_dump --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" --format=custom' > <путь вне репозитория>/kalibr-<ДАТА>.dump
    ```
 
-2. Собрать, просканировать и перенести новые образы (разделы 1 и 2).
 3. Подставить в `app.yaml` новые версию и digest `kalibr-app:<VERSION>`, затем `kubectl -n kalibr apply -f deploy/k8s/` и `kubectl -n kalibr rollout status deployment/app`. Из-за `strategy: Recreate` `app` недоступен, пока меняется под и идут миграции.
 4. Проверить `curl http://localhost:8080/healthz/ready` через `port-forward` (раздел 3) и вход в приложение.
 
@@ -140,4 +140,4 @@ TLS, резервное копирование и доставка образо�
 - Учётные записи БД: `app` подключается ролью `kalibr` без прав суперпользователя, владельцем базы `kalibr`; суперпользователь `postgres` (`POSTGRES_USER`) нужен только для обслуживания и приложению не передаётся. Роль не может переключить `session_replication_role`, а триггеры неизменяемости журнала включены как `ENABLE ALWAYS`. Как владелец, она выполняет DDL, в том числе `DROP TRIGGER` и `DISABLE TRIGGER`, поэтому от DDL журнал не защищён — остаточный риск остаётся открытым. Расширение `pg_trgm` помечено как trusted, и роль-владелец БД без прав суперпользователя создаёт его сама (проверено).
 - `requests`/`limits`, StorageClass и NetworkPolicy не заданы — их определяет кластер; ёмкости PVC (10Gi у `db`, 1Gi у `app-keys`) — стартовые значения.
 - Остановка `db`: образ задаёт `STOPSIGNAL SIGINT`; проверить, что runtime кластера его учитывает. Иначе PostgreSQL получит SIGTERM, будет ждать клиентов, и по истечении `terminationGracePeriodSeconds: 120` под получит SIGKILL с последующим crash recovery.
-- Обновление: резервная копия, пересборка, сканирование, перенос, `kubectl apply` с новыми digest (раздел 5). Из-за `Recreate` `app` недоступен на время смены пода.
+- Обновление: пересборка, сканирование, перенос, резервная копия, `kubectl apply` с новыми digest (раздел 5). Из-за `Recreate` `app` недоступен на время смены пода.
