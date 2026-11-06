@@ -257,7 +257,7 @@ responsibility:
       <tr><th>Guardrail</th><th>Acts on</th><th>Home</th><th>Expected saving</th></tr>
     </thead>
     <tbody>
-      <tr id="P-1"><td>В манифесте ревью сворачивать удаление целых сгенерированных файлов в одну строку со счётом строк; рецензенты читают только остаток диффа</td><td><span class="chip area">asd</span></td><td><code>upstream ASD: .asd/runtime.js</code></td><td>Первая итерация ревью: 1,27 МБ из 2,7 МБ диффа — удалённые миграции со снимками модели; превышение итерации 7 мин 48 с и токены на чтение удаления</td></tr>
+      <tr id="P-1"><td>В манифесте ревью сворачивать удаление целых сгенерированных файлов в одну строку со счётом строк; рецензенты читают только остаток диффа</td><td><span class="chip area">asd</span></td><td><code>upstream ASD: .asd/runtime.js</code></td><td>Первая итерация ревью: 1,27 МБ из 1,36 МБ диффа (94 %) — миграции со снимками модели, почти целиком удаление; превышение итерации 7 мин 48 с и токены на чтение удаления</td></tr>
     </tbody>
   </table>
 </section>
@@ -312,7 +312,7 @@ responsibility:
       <tr><th>Operation</th><th>Duration</th><th>Excess</th><th>Cause</th><th>Row</th></tr>
     </thead>
     <tbody>
-      <tr><td>dispatch, impl-review, combined iter-01</td><td>9 мин 49 с</td><td>7 мин 48 с</td><td>Первая итерация читала весь дифф спринта, половина которого — удалённые миграции со снимками модели.</td><td><a href="#P-1">P-1</a></td></tr>
+      <tr><td>dispatch, impl-review, combined iter-01</td><td>9 мин 49 с</td><td>7 мин 48 с</td><td>Первая итерация читала весь дифф спринта, 94 % которого — миграции со снимками модели, почти целиком удаление.</td><td><a href="#P-1">P-1</a></td></tr>
       <tr><td>external-review, impl-review, iter-01</td><td>6 мин 23 с</td><td>0 с</td><td>Внешний рецензент читал тот же дифф, единственный запуск.</td><td><a href="#P-1">P-1</a></td></tr>
       <tr><td>suite, impl-review, терминальный полный прогон</td><td>4 мин 56 с</td><td>4 мин 2 с</td><td>Обязательный полный прогон: 954 теста backend на Testcontainers и 854 теста web.</td><td></td></tr>
       <tr><td>suite, impl-test, backend на шлюзе входа 1</td><td>4 мин 42 с</td><td>3 мин 47 с</td><td>Спринт изменил тестовую инфраструктуру и базовую миграцию, поэтому охват полный.</td><td></td></tr>

@@ -37,3 +37,6 @@ A decision whose value must survive this sprint's archival is ALSO written into 
 ## Entries
 
 <!-- entries appended below this line -->
+
+- 2026-11-06 — pr open mode DoD: plan 32/32 checked; reviews.impl wave 1/1, iter-03 combined APPROVE, external APPROVE (latched) — satisfied; retrospective.html present; stubs none; no PR for the branch; tests and lint re-run skipped: since 7d3b3725 only docs and the CHANGELOG date changed, no test reads them.
+- 2026-11-06 — pr: CHANGELOG date set to the PR day 2026-11-06. Commit subjects over 50 characters (F-5) stay: rewriting would invalidate the shas recorded in test-plan and decisions-log, and the squash merge takes the PR title.

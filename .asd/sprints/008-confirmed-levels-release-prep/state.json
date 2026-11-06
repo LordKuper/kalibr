@@ -1,7 +1,7 @@
 {
   "sprint_id": "008-confirmed-levels-release-prep",
   "branch": "sprint/008-confirmed-levels-release-prep",
-  "phase": "retro",
+  "phase": "pr",
   "workflow": "lite",
   "documents": {
     "audit": true,
@@ -69,6 +69,13 @@
       "reason": "adaptive: no new or changed subsystem boundary; confirmed level stays inside promotion, release rules live in the platform core",
       "evidence": "audit.md Subsystems map; git diff -- docs/architecture/subsystems.md (empty)",
       "artifact_revision": "docs/architecture/subsystems.md"
+    },
+    {
+      "gate": "PR publication",
+      "decision_actor": "orchestrator",
+      "reason": "adaptive: DoD met (plan 32/32, wave 1/1 iter-03 combined APPROVE, external APPROVE, full suite green at 7d3b3725, no code path changed since, retro written, stubs none); scope authority — user-accepted sprint.md AC-1..AC-20; gh authenticated with push access",
+      "evidence": "test-plan.md Suite run; state.json reviews.impl; git diff 7d3b3725...HEAD (docs, CHANGELOG only)",
+      "artifact_revision": "sprint/008-confirmed-levels-release-prep"
     }
   ],
   "task_routing": {
@@ -161,7 +168,7 @@
     }
   },
   "created_at": "2026-11-05T15:12:22.117Z",
-  "updated_at": "2026-11-06T08:34:01.078Z",
+  "updated_at": "2026-11-06T08:35:45.894Z",
   "review_fixes_pending": null,
   "test_defects_pending": null,
   "pr": null,
