@@ -66,10 +66,10 @@ public sealed class TestEnvironment : IAsyncLifetime
         await ApiHost.StartAsync(await CreateDatabaseAsync(), WithMail(settings));
 
     /// <summary>
-    /// Creates an empty database owned by the application role in the shared container, for a host to migrate or for a test that migrates it step by step.
+    /// Creates an empty database owned by the application role in the shared container, for a host to migrate.
     /// </summary>
     /// <returns>The Npgsql connection string of the new database, as the application role.</returns>
-    public async Task<string> CreateDatabaseAsync()
+    private async Task<string> CreateDatabaseAsync()
     {
         var database = $"t{Guid.NewGuid():N}";
         await using (var admin = new NpgsqlConnection(container.GetConnectionString()))

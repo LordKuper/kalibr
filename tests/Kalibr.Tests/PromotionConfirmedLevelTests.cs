@@ -101,15 +101,11 @@ public sealed class PromotionConfirmedLevelTests(PromotionHost fixture) : IClass
                 scaleId = shortScale.Id,
             },
             critical.ETag)).Expect(HttpStatusCode.OK);
-        var next = (await kit.Author.PostAsync($"/api/v1/career/matrices/{kit.MatrixId}/versions")).Expect(HttpStatusCode.Created).Json!["id"]!.GetValue<Guid>();
         var added = await admin.MakeCompetencyAsync(Scenarios.Unique("Новая"), null, Guid.Parse(CareerScenarios.BaseScaleId));
         var content = kit.Content(seniorCriticalScore: 2);
         Swap(content, "competencies", kit.Profile.Id, added.Id);
         Swap(content, "requirements", kit.Profile.Id, added.Id);
-        (await kit.SaveAsync(kit.Author, content, versionId: next)).Expect(HttpStatusCode.OK);
-        (await kit.TransitAsync(first.Org.TeamHead.Client, "submit", versionId: next)).Expect(HttpStatusCode.OK);
-        (await kit.TransitAsync(first.Org.DepartmentHead.Client, "approve", versionId: next)).Expect(HttpStatusCode.OK);
-        (await kit.TransitAsync(first.Org.Hr.Client, "approve", versionId: next)).Expect(HttpStatusCode.OK);
+        await PublishVersionAsync(first, content);
 
         var second = await first.AnnounceNextAsync();
         var application = await SubmitSwappedAsync(second, candidate, raters, kit.Profile.Id, added.Id);
@@ -131,6 +127,59 @@ public sealed class PromotionConfirmedLevelTests(PromotionHost fixture) : IClass
         confirmed["score"]!.GetValue<int>().Should().Be(4);
         confirmed["decidedAt"]!.GetValue<DateTimeOffset>().Should().BeCloseTo(firstDecision.Json!["decidedAt"]!.GetValue<DateTimeOffset>(), TimestampTolerance);
         confirmed["scalePoints"]!.AsArray().Should().HaveCount(5, "the confirmation keeps the scale of the version it was given in");
+    }
+
+    [Fact]
+    public async Task Ac4_TheConfirmation_OfACompetencyAbsentFromTheLatestApplication_ComesFromTheLatestOneThatHadIt()
+    {
+        var first = await fixture.NewSceneAsync();
+        var raters = await first.NewRatersAsync(3, 2);
+        var candidate = await first.NewCandidateAsync();
+        var kit = first.Kit;
+        var added = await first.Org.Admin.MakeCompetencyAsync(Scenarios.Unique("Новая"), null, Guid.Parse(CareerScenarios.BaseScaleId));
+        await DecideSessionAsync(first, candidate, raters, 4, 3, "Meets");
+
+        var swapped = kit.Content();
+        Swap(swapped, "competencies", kit.Profile.Id, added.Id);
+        Swap(swapped, "requirements", kit.Profile.Id, added.Id);
+        await PublishVersionAsync(first, swapped);
+        var second = await first.AnnounceNextAsync();
+        var swappedApplication = await SubmitSwappedAsync(second, candidate, raters, kit.Profile.Id, added.Id);
+        await second.PutInStageAsync(3);
+        foreach (var rater in raters)
+        {
+            (await rater.Client.PutAsync($"{Applications}/{swappedApplication.Id}/rating", AnswersOf(4, kit.Critical.Id, added.Id))).Expect(HttpStatusCode.OK);
+        }
+
+        await second.PutInStageAsync(5);
+        var chair = second.Org.TeamHead.Client;
+        var review = await ReviewAsync(chair, swappedApplication.Id);
+        var finalScores = new[] { kit.Critical.Id, added.Id }.Select(competencyId => new { competencyId, score = 2 }).ToArray();
+        (await chair.PutAsync($"{Applications}/{swappedApplication.Id}/review", new { finalScores, decision = "DoesNotMeet" }, review.ETag)).Expect(HttpStatusCode.OK);
+        await second.PutInStageAsync(7);
+
+        await PublishVersionAsync(second, kit.Content());
+        var third = await second.AnnounceNextAsync();
+        var current = await third.SubmitForAdmissionAsync(candidate, raters);
+        await third.PutInStageAsync(3);
+        await third.RateAsync(raters, current.Id, 4, 4);
+        await third.PutInStageAsync(5);
+
+        var card = await ReviewAsync(chair, current.Id);
+
+        ConfirmedOf(card, kit.Profile.Id)!["score"]!.GetValue<int>().Should().Be(3, "the latest application lacked the competency, so the first one that had it confirms");
+        ConfirmedOf(card, kit.Critical.Id)!["score"]!.GetValue<int>().Should().Be(2, "a competency the latest application had is confirmed by it");
+    }
+
+    private static async Task<Guid> PublishVersionAsync(PromotionScene scene, JsonNode content)
+    {
+        var kit = scene.Kit;
+        var version = (await kit.Author.PostAsync($"/api/v1/career/matrices/{kit.MatrixId}/versions")).Expect(HttpStatusCode.Created).Json!["id"]!.GetValue<Guid>();
+        (await kit.SaveAsync(kit.Author, content, versionId: version)).Expect(HttpStatusCode.OK);
+        (await kit.TransitAsync(scene.Org.TeamHead.Client, "submit", versionId: version)).Expect(HttpStatusCode.OK);
+        (await kit.TransitAsync(scene.Org.DepartmentHead.Client, "approve", versionId: version)).Expect(HttpStatusCode.OK);
+        (await kit.TransitAsync(scene.Org.Hr.Client, "approve", versionId: version)).Expect(HttpStatusCode.OK);
+        return version;
     }
 
     private static async Task<ApiResponse> ReviewAsync(ApiClient who, Guid applicationId) =>
