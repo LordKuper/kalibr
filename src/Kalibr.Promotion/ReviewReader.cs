@@ -254,7 +254,7 @@ internal sealed class ReviewReader(
         foreach (var other in shown.OrderByDescending(other => other.DecidedAt).ThenBy(other => other.Id))
         {
             var scale = facts[other.Id].Version.Competencies.ToDictionary(competency => competency.Id, competency => competency.ScalePoints);
-            foreach (var score in finals[other.Id].Where(score => scale.ContainsKey(score.CompetencyId)))
+            foreach (var score in finals[other.Id])
             {
                 confirmed.TryAdd(score.CompetencyId, new ReviewConfirmedLevelResponse(score.Score, scale[score.CompetencyId], other.DecidedAt!.Value, facts[other.Id].Target));
             }
