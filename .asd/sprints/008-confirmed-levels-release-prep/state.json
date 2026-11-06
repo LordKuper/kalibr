@@ -1,7 +1,7 @@
 {
   "sprint_id": "008-confirmed-levels-release-prep",
   "branch": "sprint/008-confirmed-levels-release-prep",
-  "phase": "impl-review",
+  "phase": "design-promote",
   "workflow": "lite",
   "documents": {
     "audit": true,
@@ -62,6 +62,13 @@
       "reason": "adaptive: both reviewers APPROVE, terminal full suite green, no waiver or debt",
       "evidence": "reviews/impl/wave-1/iter-03/combined.md; iter-01/external.md; test-plan.md Suite run",
       "artifact_revision": "ffd44818"
+    },
+    {
+      "gate": "decomposition",
+      "decision_actor": "orchestrator",
+      "reason": "adaptive: no new or changed subsystem boundary; confirmed level stays inside promotion, release rules live in the platform core",
+      "evidence": "audit.md Subsystems map; git diff -- docs/architecture/subsystems.md (empty)",
+      "artifact_revision": "docs/architecture/subsystems.md"
     }
   ],
   "task_routing": {
@@ -154,7 +161,7 @@
     }
   },
   "created_at": "2026-11-05T15:12:22.117Z",
-  "updated_at": "2026-11-06T08:23:08.285Z",
+  "updated_at": "2026-11-06T08:29:42.694Z",
   "review_fixes_pending": null,
   "test_defects_pending": null,
   "pr": null,

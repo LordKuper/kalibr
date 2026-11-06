@@ -37,3 +37,8 @@ A decision whose value must survive this sprint's archival is ALSO written into 
 ## Entries
 
 <!-- entries appended below this line -->
+
+- 2026-11-06 — design-promote decomposition (gate adaptive, оркестратор): новой подсистемы и изменений границ нет; `subsystems.md` и диаграмма mermaid без изменений.
+- 2026-11-06 — design-promote design-system gate: новых токенов нет, `DESIGN.md`, `design-system.html`, `accessibility.html` без изменений; ux-spec выключен.
+- 2026-11-06 — design-promote: AC-1…AC-8 спринта вошли в `promotion.html` как AC-96…AC-103 с историей комиссии; релизные решения — в `stack.html` «Контракт из кода» (ревизия 22), «Учётная запись БД приложения», Q5, `efcore-10.0.12.md`, `postgres-image-18.6-trixie.md`, `desk.html` AC-121; подтверждённый уровень — в `promotion.md`.
+- 2026-11-06 — design-promote сверх списка плана: `audit.md`, `career-framework.md`, `org-structure.md` ссылались на удалённые миграции и схлопывание, исправлены; `audit.md` — и на прежнего суперпользователя. Требования AC-149, AC-152, AC-41 (отозванные) и история ревизий `stack.html` не менялись: это история.
