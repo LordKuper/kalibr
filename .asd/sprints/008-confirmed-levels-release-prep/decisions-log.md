@@ -52,3 +52,5 @@ A decision whose value must survive this sprint's archival is ALSO written into 
 - 2026-11-06 — impl-test: defects D-1 → impl test-fix (digest d4da786c512ab64646683fb05a3edb751bbd18dc09a7de6342f86c32e96d0334)
 - 2026-11-06 — route D-1: standard (risk:migration), dispatch HEAD 80394ba4
 - 2026-11-06 — impl test-fix: defects D-1 resolved
+- 2026-11-06 — route impl-test entry 2: standard, dispatch HEAD 52371598
+- 2026-11-06 — impl-test: impacted set green (full: backend 953/953, web 855/855; AC-9 comparison with no difference), 0/0 tests
