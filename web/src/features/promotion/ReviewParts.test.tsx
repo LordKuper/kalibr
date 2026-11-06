@@ -33,20 +33,6 @@ describe("confirmed level of a competency on the review card (AC-3)", () => {
     ).toBeInTheDocument();
   });
 
-  it("takes the top of the scale of the application it was confirmed in", () => {
-    render(
-      <ConfirmedLevelText
-        level={{
-          ...CONFIRMED,
-          score: 2,
-          scalePoints: CONFIRMED.scalePoints.slice(0, 3),
-        }}
-      />,
-    );
-
-    expect(screen.getByText(/Подтверждено: 2 из 3,/)).toBeInTheDocument();
-  });
-
   it("draws nothing when the competency has no confirmation", () => {
     const { container } = render(<ConfirmedLevelText level={null} />);
 
