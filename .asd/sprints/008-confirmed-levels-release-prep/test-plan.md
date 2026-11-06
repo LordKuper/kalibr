@@ -14,7 +14,7 @@ were scoped through; the next re-entry's delta is `git diff <this sha>...HEAD`.
 
 | Entry | HEAD analysed | Scope |
 |---|---|---|
-| 1 | | full change surface (`git diff main...HEAD`, без `.asd/sprints`) |
+| 1 | 63cc799f | full change surface (`git diff main...HEAD`, без `.asd/sprints`) |
 
 ## Risk → check decisions
 
@@ -37,7 +37,7 @@ were scoped through; the next re-entry's delta is `git diff <this sha>...HEAD`.
 
 **A. AC-9, схема.** Старая линия — `c95047a0`, новая — `HEAD`; оба состояния выгружены `git archive` в каталог вне репозитория, миграции применены `dotnet ef database update` (настоящий путь EF; `migrations script` старой линии не годится: сырые `Sql()` без `;`) к двум базам одного `postgres:18.6-trixie` под `postgres`. Затем `pg_dump --schema-only --no-owner --no-privileges` обеих, порядок колонок внутри `CREATE TABLE` нормализован сортировкой.
 
-- Расхождение одно, шесть колонок: в старой линии `DEFAULT false` (`promotion_applications.artifacts_missing`, `is_sent_to_review`, `review_letter_pending`, `was_held_at_close`; `promotion_waves.no_chair_letter_sent`, `versions_fixed`), в новой нет. Вердикт: допустимо и ожидаемо — следы `AddColumn(defaultValue: false)` старых миграций; модель EF default не задаёт (иначе `ef-pending-changes` не был бы чист), приложение всегда передаёт значение. Прямых SQL-вставок без этих колонок в `src`/`tests` нет. Решает оркестратор, если AC-9 «схема совпадает» читать без этого исключения.
+- Расхождение одно, шесть колонок: в старой линии `DEFAULT false` (`promotion_applications.artifacts_missing`, `is_sent_to_review`, `review_letter_pending`, `was_held_at_close`; `promotion_waves.no_chair_letter_sent`, `versions_fixed`), в новой нет. Вердикт: допустимо и ожидаемо — следы `AddColumn(defaultValue: false)` старых миграций; модель EF default не задаёт (иначе `ef-pending-changes` не был бы чист), приложение всегда передаёт значение. Прямых SQL-вставок без этих колонок в `src`/`tests` нет. Решение оркестратора: AC-9 требует совпадения схемы без исключений, отказ от него был бы сменой скоупа; расхождение устраняется в `InitialCreate`, дефект D-1.
 - Только порядок колонок отличается у `employees.education`, `search_vector` (2 таблицы), ряд колонок `promotion_applications` и `promotion_waves`, `email_confirmed_*`: допустимо, колонки добавлены поздно.
 - Ограничения, индексы, внешние ключи, последовательности, коллации (`ru-x-icu`), сгенерированные колонки совпадают построчно (иных расхождений в дампе нет).
 - Явно равны в обеих базах: триггеры `audit_events_reject_update_delete` и `audit_events_reject_truncate` с `tgenabled = 'A'`; `IX_positions_name_lower`, `IX_legal_entities_name_lower` (`CREATE UNIQUE INDEX … lower((name)::text)`); тело `audit_events_reject_change` (md5 `600736ab…`); расширение `pg_trgm` 1.6.
@@ -107,6 +107,7 @@ Code defects found by the suite. Resolved in `impl` test-fix mode. `Entry` throu
 
 | ID | Entry | Location | Symptom | Failing test | Status | Fix commit |
 |---|---|---|---|---|---|---|
+| D-1 | 1 | src/Kalibr.Platform/Migrations/20261105155028_InitialCreate.cs | Шесть колонок без DEFAULT false, в старой линии он есть: promotion_applications.artifacts_missing, is_sent_to_review, review_letter_pending, was_held_at_close; promotion_waves.no_chair_letter_sent, versions_fixed | Разовая проверка A, сравнение схем AC-9 | pending | |
 
 ## Manual verification (optional)
 
