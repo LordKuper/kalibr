@@ -75,7 +75,7 @@
       "decision_actor": "orchestrator",
       "reason": "adaptive: DoD met (plan 32/32, wave 1/1 iter-03 combined APPROVE, external APPROVE, full suite green at 7d3b3725, no code path changed since, retro written, stubs none); scope authority — user-accepted sprint.md AC-1..AC-20; gh authenticated with push access",
       "evidence": "test-plan.md Suite run; state.json reviews.impl; git diff 7d3b3725...HEAD (docs, CHANGELOG only)",
-      "artifact_revision": "sprint/008-confirmed-levels-release-prep"
+      "artifact_revision": "PR #14"
     }
   ],
   "task_routing": {
@@ -168,9 +168,13 @@
     }
   },
   "created_at": "2026-11-05T15:12:22.117Z",
-  "updated_at": "2026-11-06T08:35:45.894Z",
+  "updated_at": "2026-11-06T08:36:23.066Z",
   "review_fixes_pending": null,
   "test_defects_pending": null,
-  "pr": null,
+  "pr": {
+    "number": 14,
+    "url": "https://github.com/LordKuper/kalibr/pull/14",
+    "state": "open"
+  },
   "archived_at": null
 }
