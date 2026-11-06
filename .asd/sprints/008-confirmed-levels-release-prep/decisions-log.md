@@ -60,3 +60,4 @@ A decision whose value must survive this sprint's archival is ALSO written into 
 - 2026-11-06 — impl fix for wave-1/iter-01: findings resolved (F1 ca5bba6c, F2 84b0cdfe, F6 4bd3c30b, F3 and F4 5cf024fb). F5 is a test removal, which a review-fix tester may not perform (artifact-layout.md Test plan); recorded as a remove row for impl-test entry 3.
 - 2026-11-06 — route impl-test entry 3: standard, dispatch HEAD 6c528f7b
 - 2026-11-06 — impl-test: impacted set green (full: backend 954/954, web 854/854), 1/1 tests since the review (F3 added, F5 removed)
+- 2026-11-06 — impl-review wave-1/iter-02: combined CONCERNS (F1 critical, test helper with an unread return value), external latched; severity critical rules out the minor test-only branch; → impl review-fix, tester chain.

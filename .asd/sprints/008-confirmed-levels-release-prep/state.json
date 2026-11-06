@@ -1,7 +1,7 @@
 {
   "sprint_id": "008-confirmed-levels-release-prep",
   "branch": "sprint/008-confirmed-levels-release-prep",
-  "phase": "impl-test",
+  "phase": "impl-review",
   "workflow": "lite",
   "documents": {
     "audit": true,
@@ -118,15 +118,20 @@
       "wave": 1,
       "waves": [
         {
-          "iteration": 1,
+          "iteration": 2,
           "verdicts": {
             "iter-01": {
+              "combined": "CONCERNS",
+              "external": "APPROVE"
+            },
+            "iter-02": {
               "combined": "CONCERNS",
               "external": "APPROVE"
             }
           },
           "iteration_heads": {
-            "iter-01": "1a0c4884dff6070bfd456c5f306ff56624e6ba94"
+            "iter-01": "1a0c4884dff6070bfd456c5f306ff56624e6ba94",
+            "iter-02": "3cfe2838fadbb204fd82eb1c2e18cebbb5d99833"
           },
           "latched": {
             "external": 1
@@ -136,8 +141,8 @@
     }
   },
   "created_at": "2026-11-05T15:12:22.117Z",
-  "updated_at": "2026-11-06T07:54:11.641Z",
-  "review_fixes_pending": null,
+  "updated_at": "2026-11-06T08:07:51.123Z",
+  "review_fixes_pending": "wave-1/iter-02",
   "test_defects_pending": null,
   "pr": null,
   "archived_at": null
