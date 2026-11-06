@@ -151,3 +151,5 @@
 {"op":"open","id":"cleanup#1","kind":"phase","parent":null,"start":"2026-11-06T08:29:43.021Z","attrs":{}}
 {"op":"close","id":"cleanup#1","kind":"phase","parent":null,"start":"2026-11-06T08:29:43.021Z","end":"2026-11-06T08:30:10.621Z","outcome":"done","attrs":{}}
 {"op":"open","id":"retro#1","kind":"phase","parent":null,"start":"2026-11-06T08:30:10.621Z","attrs":{}}
+{"op":"close","id":"retro#1","kind":"phase","parent":null,"start":"2026-11-06T08:30:10.621Z","end":"2026-11-06T08:34:48.498Z","outcome":"done","attrs":{}}
+{"op":"open","id":"pr#1","kind":"phase","parent":null,"start":"2026-11-06T08:35:09.461Z","attrs":{}}
