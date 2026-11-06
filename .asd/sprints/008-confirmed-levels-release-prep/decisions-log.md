@@ -61,3 +61,5 @@ A decision whose value must survive this sprint's archival is ALSO written into 
 - 2026-11-06 — route impl-test entry 3: standard, dispatch HEAD 6c528f7b
 - 2026-11-06 — impl-test: impacted set green (full: backend 954/954, web 854/854), 1/1 tests since the review (F3 added, F5 removed)
 - 2026-11-06 — impl-review wave-1/iter-02: combined CONCERNS (F1 critical, test helper with an unread return value), external latched; severity critical rules out the minor test-only branch; → impl review-fix, tester chain.
+- 2026-11-06 — route wave-1/iter-02 F1: standard, dispatch HEAD 5fafda62
+- 2026-11-06 — impl fix for wave-1/iter-02: findings resolved (F1 93d7a278)
