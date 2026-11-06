@@ -66,3 +66,5 @@ A decision whose value must survive this sprint's archival is ALSO written into 
 - 2026-11-06 — route impl-test entry 4: standard, dispatch HEAD e8130a28
 - 2026-11-06 — impl-test: impacted set green (PromotionConfirmedLevelTests 3/3), 0/0 tests
 - 2026-11-06 — impl-review wave-1/iter-03: combined APPROVE, external latched; reviewer DoD met, terminal full suite next.
+- 2026-11-06 — route terminal-suite-1: standard, dispatch HEAD 7d3b3725
+- 2026-11-06 — impl-review DoD met: wave-1 iter 3, terminal full suite green at 7d3b3725 (backend 954/954, web 854/854, lint, build); green handoff adaptive.
