@@ -47,11 +47,11 @@ record, by the time `pr` runs. Each per-entry record measures only the tree that
 analysed, not any tree produced later
 (`.asd/rules/sprint-lifecycle.md` "Impacted test set").
 
-- Command: `dotnet test --solution Kalibr.slnx --filter-class "*PromotionConfirmedLevelTests"` из корня репозитория, конфигурация Debug (шаги 3 и 8 совпадают: запись 4 тестов не пишет и не удаляет, дельта — только сигнатура приватного хелпера теста, предохранитель общей инфраструктуры не применяется). Одна попытка, «Handshake failures» не было, запасной запуск через xunit не понадобился
-- Scope: impacted (`PromotionConfirmedLevelTests`, тестовый файл дельты)
-- Result: pass — 3 пройдено, 0 сбоев, 0 пропущено (exit 0, 43 с)
-- Lint / build: pass — `dotnet build Kalibr.slnx --tl:off` 0 предупреждений 0 ошибок; `npm --prefix web run lint` (biome ci + typecheck) exit 0
-- HEAD: e8130a28 — дерево, которое проанализировала запись 4; последующие коммиты записи меняют только `test-plan.md`, `test-plan.entry-03.md` и бухгалтерию спринта
+- Command: `dotnet test --solution Kalibr.slnx` затем `npm --prefix web test` из корня репозитория, без фильтров, конфигурация Debug; запуски по очереди, не рядом. "Handshake failures" не было, повторов не было
+- Scope: full
+- Result: pass — backend 954 пройдено, 0 сбоев, 0 пропущено (exit 0, 3 мин 28 с); web 84 файла и 854 теста пройдено, 0 сбоев (exit 0, 64.5 с)
+- Lint / build: pass — `npm --prefix web run lint` (biome ci + typecheck) exit 0; `dotnet build Kalibr.slnx --tl:off` 0 предупреждений 0 ошибок, exit 0; `npm --prefix web run build` exit 0
+- HEAD: 7d3b3725620f3d9f70d1be0a392ccd09416d799f
 
 ## Defects
 
