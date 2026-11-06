@@ -97,3 +97,13 @@
 {"op":"close","id":"external-iter-01","kind":"external-review","parent":"impl-review#1","start":"2026-11-06T07:33:41.764Z","end":"2026-11-06T07:40:04.804Z","outcome":"done","attrs":{"agent":"asd-external-review"}}
 {"op":"close","id":"combined-iter-01","kind":"dispatch","parent":"impl-review#1","start":"2026-11-06T07:33:41.705Z","end":"2026-11-06T07:43:31.096Z","outcome":"done","attrs":{"agent":"asd-reviewer-combined"}}
 {"op":"close","id":"wave-1/iter-01","kind":"review-iteration","parent":"impl-review#1","start":"2026-11-06T07:33:31.063Z","end":"2026-11-06T07:43:45.788Z","outcome":"done","attrs":{}}
+{"op":"close","id":"impl-review#1","kind":"phase","parent":null,"start":"2026-11-06T07:32:44.555Z","end":"2026-11-06T07:43:54.508Z","outcome":"done","attrs":{}}
+{"op":"open","id":"impl#4","kind":"phase","parent":null,"start":"2026-11-06T07:43:54.743Z","attrs":{}}
+{"op":"open","id":"review-fix-dev","kind":"dispatch","parent":"impl#4","start":"2026-11-06T07:43:55.392Z","attrs":{"agent":"asd-dev","tier":"standard","model":"sonnet"}}
+{"op":"close","id":"review-fix-dev","kind":"dispatch","parent":"impl#4","start":"2026-11-06T07:43:55.392Z","end":"2026-11-06T07:45:50.553Z","outcome":"done","attrs":{"agent":"asd-dev","tier":"standard","model":"sonnet"}}
+{"op":"open","id":"review-fix-tester","kind":"dispatch","parent":"impl#4","start":"2026-11-06T07:45:50.799Z","attrs":{"agent":"asd-tester"}}
+{"op":"open","id":"suite review-fix-tester#1","kind":"suite","parent":"review-fix-tester","start":"2026-11-06T07:47:37.420Z","attrs":{"scope":"impacted"}}
+{"op":"close","id":"suite review-fix-tester#1","kind":"suite","parent":"review-fix-tester","start":"2026-11-06T07:47:37.420Z","end":"2026-11-06T07:51:39.213Z","outcome":"done","attrs":{"scope":"impacted"}}
+{"op":"open","id":"suite review-fix-tester#2","kind":"suite","parent":"review-fix-tester","start":"2026-11-06T07:51:39.286Z","attrs":{"scope":"impacted"}}
+{"op":"close","id":"suite review-fix-tester#2","kind":"suite","parent":"review-fix-tester","start":"2026-11-06T07:51:39.286Z","end":"2026-11-06T07:52:57.000Z","outcome":"done","attrs":{"scope":"impacted"}}
+{"op":"close","id":"review-fix-tester","kind":"dispatch","parent":"impl#4","start":"2026-11-06T07:45:50.799Z","end":"2026-11-06T07:54:10.927Z","outcome":"done","attrs":{"agent":"asd-tester"}}
