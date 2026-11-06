@@ -592,7 +592,7 @@ namespace Kalibr.Platform.Migrations
                     starts_on = table.Column<DateOnly>(type: "date", nullable: false),
                     ends_on = table.Column<DateOnly[]>(type: "date[]", nullable: false),
                     processed_stage = table.Column<int>(type: "integer", nullable: false),
-                    versions_fixed = table.Column<bool>(type: "boolean", nullable: false),
+                    versions_fixed = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     rater_reminder_sent = table.Column<bool>(type: "boolean", nullable: false),
                     version = table.Column<int>(type: "integer", nullable: false),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
@@ -771,7 +771,7 @@ namespace Kalibr.Platform.Migrations
                 {
                     wave_id = table.Column<Guid>(type: "uuid", nullable: false),
                     org_unit_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    no_chair_letter_sent = table.Column<bool>(type: "boolean", nullable: false)
+                    no_chair_letter_sent = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -809,10 +809,10 @@ namespace Kalibr.Platform.Migrations
                     ignore_interval_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     formal_failures = table.Column<string[]>(type: "character varying(30)[]", nullable: false),
                     meets_after_rating = table.Column<bool>(type: "boolean", nullable: true),
-                    artifacts_missing = table.Column<bool>(type: "boolean", nullable: false),
-                    is_sent_to_review = table.Column<bool>(type: "boolean", nullable: false),
-                    review_letter_pending = table.Column<bool>(type: "boolean", nullable: false),
-                    was_held_at_close = table.Column<bool>(type: "boolean", nullable: false),
+                    artifacts_missing = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    is_sent_to_review = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    review_letter_pending = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    was_held_at_close = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     decision = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true),
                     decided_by = table.Column<Guid>(type: "uuid", nullable: true),
                     decided_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
