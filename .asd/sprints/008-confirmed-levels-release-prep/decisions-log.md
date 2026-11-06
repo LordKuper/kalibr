@@ -37,6 +37,3 @@ A decision whose value must survive this sprint's archival is ALSO written into 
 ## Entries
 
 <!-- entries appended below this line -->
-
-- 2026-11-06 — retro: retrospective.html written; 7 friction entries (F-1…F-7), 8 actions (6 asd, one of them covered by an existing rule; 2 consumer), 1 systemic proposal (P-1, asd); analysed branch
-- 2026-11-06 — retro upstream: published A-2 https://github.com/LordKuper/agentic-software-development/issues/88, A-3 https://github.com/LordKuper/agentic-software-development/issues/89, A-4 https://github.com/LordKuper/agentic-software-development/issues/90, A-5 https://github.com/LordKuper/agentic-software-development/issues/91, A-8 https://github.com/LordKuper/agentic-software-development/issues/92, P-1 https://github.com/LordKuper/agentic-software-development/issues/93; skipped none (A-1 is a covered-by row)
