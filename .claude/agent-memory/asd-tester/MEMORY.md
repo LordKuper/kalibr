@@ -8,3 +8,5 @@
 - [Threshold is contract](feedback_threshold-is-contract.md) — architecture-pinned test threshold: red run is code defect D-N, threshold stays
 - [Suite timing operation](feedback_suite-timing-operation.md) — open `suite` before every run, close right after, separate calls
 - [Promotion tests runtime](project_promotion-tests-runtime.md) — backend suite alone (not beside web); 1 s tick, NewSceneAsync per test; race tests hold advisory/wave locks
+- [Commit subject count](feedback_commit-subject-count.md) — measure the subject (max 50) with node before committing; no amend after
+- [One-off docker and mutation recipes](project_one-off-docker-and-mutation-recipes.md) — scratch-copy mutations, old-vs-new schema diff, windows docker quirks
