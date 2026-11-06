@@ -50,3 +50,5 @@ A decision whose value must survive this sprint's archival is ALSO written into 
 - 2026-11-06 — impl-test: docs/architecture/audit.md, career-framework.md, org-structure.md still name the old migration line; added to the design-promote list beside the plan.md items.
 - 2026-11-06 — impl-test: AC-9 demands an equal schema; dropping it is a scope change, not an adaptive acceptance (checkpoints.md Gate policy), so the six DEFAULT false columns are fixed in InitialCreate.
 - 2026-11-06 — impl-test: defects D-1 → impl test-fix (digest d4da786c512ab64646683fb05a3edb751bbd18dc09a7de6342f86c32e96d0334)
+- 2026-11-06 — route D-1: standard (risk:migration), dispatch HEAD 80394ba4
+- 2026-11-06 — impl test-fix: defects D-1 resolved
