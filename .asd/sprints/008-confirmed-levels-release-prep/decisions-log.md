@@ -54,3 +54,4 @@ A decision whose value must survive this sprint's archival is ALSO written into 
 - 2026-11-06 — impl test-fix: defects D-1 resolved
 - 2026-11-06 — route impl-test entry 2: standard, dispatch HEAD 52371598
 - 2026-11-06 — impl-test: impacted set green (full: backend 953/953, web 855/855; AC-9 comparison with no difference), 0/0 tests
+- 2026-11-06 — impl-review wave-1/iter-01: combined CONCERNS (F1-F6), external APPROVE; → impl review-fix. F1 reverses the Task 2 flagged choice accepted in this sprint (skip of a final score absent from its version): the reviewer showed the case is impossible by contract.
