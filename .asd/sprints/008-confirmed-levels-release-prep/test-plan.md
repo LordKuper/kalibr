@@ -16,36 +16,31 @@ were scoped through; the next re-entry's delta is `git diff <this sha>...HEAD`.
 |---|---|---|
 | 1 | 63cc799f | full change surface (`git diff main...HEAD`, без `.asd/sprints`) |
 | 2 | c1325443 | delta since entry 1 (`git diff 63cc799f...HEAD`, без `.asd/sprints`): `20261105155028_InitialCreate.cs` |
+| 3 |  | delta since entry 2 (`git diff c1325443...HEAD`, без `.asd/sprints`): `ReviewReader.cs`, `tours.ts`, `deploy/README.md`, `TestEnvironment.cs`, `PromotionConfirmedLevelTests.cs` |
 
 ## Risk → check decisions
 
-Строки записи 1 — в `test-plan.entry-01.md` (там же результаты разовых проверок B, C, D и первый прогон A).
+Строки записи 1 — в `test-plan.entry-01.md` (там же результаты разовых проверок B, C, D и первый прогон A), записи 2 — в `test-plan.entry-02.md` (повтор проверки A после D-1).
 
 | Change | Material risk | Chosen check | Decision | Reason |
 |---|---|---|---|---|
-| `InitialCreate`: `defaultValue: false` у шести колонок (D-1, AC-9) | схема чистой базы снова расходится со старой линией; приложение не задаёт значение — `DEFAULT` в схеме наблюдаем только сравнением с базой старой линии | разовое сравнение на реальных базах (результат ниже); весь backend-набор идёт на схеме `InitialCreate` | none | Заменяет строку `InitialCreate` записи 1. Поведение не менялось: приложение всегда передаёт значение, ни один тест не вставляет строки без этих колонок. Постоянный тест на `DEFAULT` шести колонок закреплял бы след старой линии, а не требование, и повторял бы разовое сравнение. Модель EF default не задаёт, поэтому `ef-pending-changes` остаётся проверкой, что правка в миграции не разошлась с моделью |
-| `ReviewReader`: выбор подтверждения по компетенции (AC-4, замечание F3 `wave-1/iter-01`) | в последней решённой заявке компетенции нет (другая версия матрицы), а ранняя её подтверждала: подтверждение берётся только из последней заявки и пропадает. Ни `Ac1`, ни `Ac4` не отличают «последнюю заявку» от «последней заявки, где компетенция была» | интеграционный (реальный PostgreSQL, тестовый хост) | add | `PromotionConfirmedLevelTests.Ac4_…_ComesFromTheLatestOneThatHadIt`: три версии матрицы, профильная компетенция в первой и третьей, во второй её нет; карточка третьей заявки показывает оценку первой, а критическая — оценку второй. Хелпер публикации версии общий с `Ac4_…FollowsACompetencyAcrossMatrixVersions…` |
-| `web/src/features/promotion/ReviewParts.test.tsx`: `takes the top of the scale of the application it was confirmed in` (замечание F5 `wave-1/iter-01`) | отдельного риска нет: компонент видит только `level.scalePoints`, «из 4» уже проверяет первый тест, оба падают от одной мутации `at(0)`; выбор шкалы версии проверяет сервер, `Ac4` | компонентный (vitest) | remove | Удалить второй тест `ReviewParts.test.tsx` (`code-style.md` §17, дубликат). Review-fix-тестер тесты не удаляет (`artifact-layout.md` «Test plan»): удаляет следующая запись `impl-test` с причиной в `Removed tests`. Правка `Added tests` записи 1 о втором тесте — там же |
-
-### Разовые проверки (результаты)
-
-**A. AC-9, схема (повтор после D-1).** Тот же способ, что в записи 1: старая линия `c95047a0` (15 миграций), новая — `HEAD` (`20261105155028_InitialCreate`); оба состояния выгружены `git archive` в каталог вне репозитория, собраны, миграции применены `dotnet ef database update --no-build` под `postgres` к двум базам одного временного контейнера `postgres:18.6-trixie` (`kalibr-t008-e2-pg`, затем `docker rm -f -v`).
-
-- Схема: `pg_dump --schema-only --no-owner --no-privileges` обеих баз, порядок колонок внутри `CREATE TABLE` нормализован сортировкой, случайные токены `\restrict` вырезаны. `diff` нормализованных дампов (по 2042 строки) пуст: ограничения, индексы, внешние ключи, последовательности, коллации, сгенерированные колонки, триггеры `audit_events_reject_*`, индексы `lower(name)`, тело `audit_events_reject_change` и расширение `pg_trgm` входят в этот дамп и совпали. В записи 1 то же сравнение показывало шесть расхождений `DEFAULT false`.
-- Значения по умолчанию: `information_schema.columns.column_default = 'false'` у шести колонок в обеих базах — `promotion_applications.artifacts_missing`, `is_sent_to_review`, `review_letter_pending`, `was_held_at_close`; `promotion_wave_units.no_chair_letter_sent`; `promotion_waves.versions_fixed`. Колонок с `column_default` не `NULL` в каждой базе ровно шесть. Запись 1 называла таблицу `no_chair_letter_sent` ошибочно: это `promotion_wave_units`.
-- Начальные данные: `pg_dump --data-only --column-inserts` без `__EFMigrationsHistory`, четыре строки (`roles` 2, `promotion_settings` 1, `competency_scales` 1) совпадают; различается только `created_at` строки шкалы (момент применения миграции, 07:24:53 против 07:24:56) и токен `\restrict`. В новой базе `__EFMigrationsHistory` — одна строка.
-- Вердикт: расхождений схемы и начальных данных, кроме порядка колонок и `created_at` строки шкалы, нет; AC-9 выполнен без исключений, D-1 закрыт.
+| `ReviewParts.test.tsx`: `takes the top of the scale of the application it was confirmed in` (замечание F5 `wave-1/iter-01`; строка `remove` записи 2) | отдельного риска нет: компонент видит только `level.scalePoints`, «из 4» уже проверяет первый тест, оба падают от одной мутации `at(0)` | компонентный (vitest) | remove | Выполнено, причина и доказательство — в `Removed tests`. Строка `Added tests` записи 1 об этом тесте (`test-plan.entry-01.md`, сегмент не правится) этим удалением снята; её доказательство относится теперь только к `is one line with the score out of the top of its scale, …` |
+| `ReviewReader`: убран фильтр `scale.ContainsKey` (замечание «упасть, а не пропустить», `ca5bba6c`) | оценка компетенции вне шкалы своей версии раньше молча пропускалась, теперь `KeyNotFoundException` | интеграционный | none | Ветка недостижима через API: `PUT .../review` проверяет итоговые оценки по версии заявки (`ScoreRules.Problems`), заявка и оценки одной версии. Тест на неё строил бы состояние прямой записью в базу — гипотетический риск (`code-style.md` §17). Цикл выбора подтверждения на реальных данных идёт во всех тестах `PromotionConfirmedLevelTests` (три версии матрицы, профильная компетенция вне шкалы последней заявки), весь backend зелёный |
+| `tours.ts`: фраза о подтверждённом уровне на шагах `review-card` (форма члена; карточка общая, `MemberReviewView`) и `review-scores` (форма председателя, `ChairReviewView`) (AC-8, `84b0cdfe`) | фраза пропала или осталась на одной форме | статическая (сборка, lint) | none | Ни один тест не читает текст справки экрана `promotion`: `ScreenTour.test.tsx` обходит только мастер матрицы. Тест текста закреплял бы формулировку, а не контракт (`code-style.md` §17: утверждение формулировки, а не токена, — не контракт); наблюдаемое поведение AC-8 — строка «Подтверждено: …» на обеих формах — уже закреплено `ReviewParts.test.tsx` и `DemoPage.test.tsx` (оба шага демо). Якоря `data-tour="review-card"` и `tour="review-scores"` на месте в `MemberReviewView.tsx` и `ChairReviewView.tsx`, `lint` и `build` чисты. Меняется только строка литерала |
+| `deploy/README.md` раздел 5: порядок шагов обновления, строка «Обновление» (AC-14, `4bd3c30b`) | команда изменилась или потеряна при перестановке | сравнение по `git diff` | none | Блоки кода файла у `c1325443` и `HEAD` дают одинаковый отсортированный md5 строк (`bd5b742b…`), а в изменённых строках `kubectl` и `pg_dump` стоят только в прозе шага: блоки кода не тронуты, переставлены и переписаны шаги 1–2 и пункт списка. Разовые проверки B и C записи 1 не повторялись: их входы (команды) не менялись. `DeploymentTests.Ac6` в полном наборе зелёный |
+| `TestEnvironment.CreateDatabaseAsync`: `private` (после удаления теста `Ac63`) | общий для всех интеграционных тестов фундамент | предохранитель общей инфраструктуры | keep | Шаг 8 — полный набор. Побочных вызовов метода не осталось: сборка и 954 теста зелёные |
+| `PromotionConfirmedLevelTests`: тест `Ac4_…ComesFromTheLatestOneThatHadIt` и хелпер `PublishVersionAsync` (`5cf024fb`) | выбор подтверждения только из последней заявки | интеграционный | keep | Строка `Added tests` и мутационное доказательство записи 2 (`test-plan.entry-02.md`) остаются в силе: код `ReviewReader` в цикле выбора не менялся с тех пор, строка цикла `ReviewReader.cs:254` та же. Хелпер не покрыт отдельным тестом: он только публикует версию и вызывается обоими `Ac4`-тестами |
 
 ## Removed tests
 
 | Test | Reason | In change scope |
 |---|---|---|
+| `web/src/features/promotion/ReviewParts.test.tsx`: `takes the top of the scale of the application it was confirmed in` | дубликат первого теста (`is one line with the score out of the top of its scale, …`): компонент читает только `level.scalePoints.at(-1)`, «из 4» первый тест уже закрепляет, а мутация `at(-1)` → `at(0)` роняет оба; шкалу по версии матрицы проверяет сервер (`Ac4`), компоненту она не видна. Доказательство, что первый тест покрывает риск без второго: мутация `at(-1)` → `at(0)` в `ReviewParts.tsx` на месте (восстановлена `git checkout` в той же команде) и `npm --prefix web test -- src/features/promotion/ReviewParts.test.tsx` → exit 1, `1 failed \| 1 passed (2)`, упал `is one line with the score out of the top of its scale, …`. Коммит `857f4f15` | yes |
 
 ## Added tests
 
 | Test | Regression proof |
 |---|---|
-| `tests/Kalibr.Tests/PromotionConfirmedLevelTests.cs`: `Ac4_TheConfirmation_OfACompetencyAbsentFromTheLatestApplication_ComesFromTheLatestOneThatHadIt` | mutation `.Take(1)` на цикле по `shown` (`ReviewReader.cs:254`, «подтверждение только из последней заявки») в копии вне репозитория: `dotnet test --solution Kalibr.slnx -c Release --filter-class "*PromotionConfirmedLevelTests"` → exit 2, упал этот тест (строка проверки профильной компетенции), два других зелёные; на неизменённом коде класс — exit 0, 3 пройдено; runs: 1 |
 
 ## Suite run
 
@@ -57,11 +52,11 @@ record, by the time `pr` runs. Each per-entry record measures only the tree that
 analysed, not any tree produced later
 (`.asd/rules/sprint-lifecycle.md` "Impacted test set").
 
-- Command: `dotnet test --solution Kalibr.slnx` и `npm --prefix web test` (предохранитель общей инфраструктуры: правка миграции, которую применяет `TestEnvironment` каждого интеграционного теста — полный набор). Шаг 3 и шаг 8 — один прогон: между ними не менялись ни тесты, ни код
+- Command: `dotnet test --solution Kalibr.slnx` и `npm --prefix web test` (предохранитель общей инфраструктуры: дельта касается `TestEnvironment`, который применяется в каждом интеграционном тесте, — полный набор). Backend запущен один раз на `6c528f7b` (шаг 3 и шаг 8 совпадают: удаление теста backend не меняет), web — шаг 3 до удаления (`ReviewParts`, `DemoPage`, `ScreenTour`: 9 тестов в 3 файлах, exit 0), шаг 8 после удаления целиком. Backend и web запускались по очереди, не вместе
 - Scope: full
-- Result: pass — backend 953 пройдено, 0 сбоев, 0 пропущено (exit 0, 3 м 38 с); web 855 пройдено в 84 файлах, 0 сбоев (exit 0, 75 с), запущен отдельно после backend, таймаутов нет
+- Result: pass — backend 954 пройдено, 0 сбоев, 0 пропущено (exit 0, 3 м 15 с, предупреждений 0); web 854 пройдено в 84 файлах, 0 сбоев (exit 0, 49 с). Число backend выросло на 1 (тест записи 2), web снизилось на 1 (удаление F5)
 - Lint / build: pass — `dotnet build Kalibr.slnx --tl:off` 0 предупреждений 0 ошибок; `npm --prefix web run lint` (biome ci + typecheck) exit 0; `npm --prefix web run build` exit 0; `npm --prefix web run check:api` exit 0; `dotnet ef migrations has-pending-model-changes` — изменений нет
-- HEAD: 523715989993cbc0231ab462e95cc6c487c3e903 — прогоны на нём; последующий коммит меняет только `test-plan.md` и `test-plan.entry-01.md`
+- HEAD: 857f4f153762acae2109d4c814c2f948ea47f3b4 — web-прогон на нём; backend — на родителе `6c528f7b` (тот же backend-код). Последующий коммит меняет только `test-plan.md` и `test-plan.entry-02.md`
 
 ## Defects
 
