@@ -107,3 +107,14 @@
 {"op":"open","id":"suite review-fix-tester#2","kind":"suite","parent":"review-fix-tester","start":"2026-11-06T07:51:39.286Z","attrs":{"scope":"impacted"}}
 {"op":"close","id":"suite review-fix-tester#2","kind":"suite","parent":"review-fix-tester","start":"2026-11-06T07:51:39.286Z","end":"2026-11-06T07:52:57.000Z","outcome":"done","attrs":{"scope":"impacted"}}
 {"op":"close","id":"review-fix-tester","kind":"dispatch","parent":"impl#4","start":"2026-11-06T07:45:50.799Z","end":"2026-11-06T07:54:10.927Z","outcome":"done","attrs":{"agent":"asd-tester"}}
+{"op":"close","id":"impl#4","kind":"phase","parent":null,"start":"2026-11-06T07:43:54.743Z","end":"2026-11-06T07:54:11.287Z","outcome":"done","attrs":{}}
+{"op":"open","id":"impl-test#3","kind":"phase","parent":null,"start":"2026-11-06T07:54:11.457Z","attrs":{}}
+{"op":"open","id":"impl-test-entry-3","kind":"dispatch","parent":"impl-test#3","start":"2026-11-06T07:54:11.779Z","attrs":{"agent":"asd-tester"}}
+{"op":"open","id":"suite impl-test#3-1","kind":"suite","parent":"impl-test-entry-3","start":"2026-11-06T07:55:34.717Z","attrs":{"scope":"full"}}
+{"op":"close","id":"suite impl-test#3-1","kind":"suite","parent":"impl-test-entry-3","start":"2026-11-06T07:55:34.717Z","end":"2026-11-06T07:59:06.377Z","outcome":"done","attrs":{"scope":"full"}}
+{"op":"open","id":"suite impl-test#3-2","kind":"suite","parent":"impl-test-entry-3","start":"2026-11-06T07:59:10.966Z","attrs":{"scope":"impacted"}}
+{"op":"close","id":"suite impl-test#3-2","kind":"suite","parent":"impl-test-entry-3","start":"2026-11-06T07:59:10.966Z","end":"2026-11-06T07:59:48.659Z","outcome":"done","attrs":{"scope":"impacted"}}
+{"op":"open","id":"suite impl-test#3-3","kind":"suite","parent":"impl-test-entry-3","start":"2026-11-06T08:00:10.124Z","attrs":{"scope":"full"}}
+{"op":"close","id":"suite impl-test#3-3","kind":"suite","parent":"impl-test-entry-3","start":"2026-11-06T08:00:10.124Z","end":"2026-11-06T08:01:06.178Z","outcome":"done","attrs":{"scope":"full"}}
+{"op":"close","id":"impl-test-entry-3","kind":"dispatch","parent":"impl-test#3","start":"2026-11-06T07:54:11.779Z","end":"2026-11-06T08:03:27.835Z","outcome":"done","attrs":{"agent":"asd-tester"}}
+{"op":"close","id":"impl-test#3","kind":"phase","parent":null,"start":"2026-11-06T07:54:11.457Z","end":"2026-11-06T08:03:27.950Z","outcome":"done","attrs":{}}

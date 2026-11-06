@@ -16,7 +16,7 @@ were scoped through; the next re-entry's delta is `git diff <this sha>...HEAD`.
 |---|---|---|
 | 1 | 63cc799f | full change surface (`git diff main...HEAD`, без `.asd/sprints`) |
 | 2 | c1325443 | delta since entry 1 (`git diff 63cc799f...HEAD`, без `.asd/sprints`): `20261105155028_InitialCreate.cs` |
-| 3 |  | delta since entry 2 (`git diff c1325443...HEAD`, без `.asd/sprints`): `ReviewReader.cs`, `tours.ts`, `deploy/README.md`, `TestEnvironment.cs`, `PromotionConfirmedLevelTests.cs` |
+| 3 | bb3836fe | delta since entry 2 (`git diff c1325443...HEAD`, без `.asd/sprints`): `ReviewReader.cs`, `tours.ts`, `deploy/README.md`, `TestEnvironment.cs`, `PromotionConfirmedLevelTests.cs` |
 
 ## Risk → check decisions
 
